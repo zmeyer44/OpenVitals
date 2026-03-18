@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Logo } from '@/assets/app/images/logo';
 
 export function FeatureAiChat() {
   return (
@@ -17,9 +18,7 @@ export function FeatureAiChat() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <div className="flex size-5 shrink-0 items-center justify-center rounded-full" style={{ background: 'linear-gradient(135deg, #3162FF, #1D3DB3)' }}>
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M12 3C7.5 3 4 6 4 9.5c0 2.5 1.5 4.5 3.5 5.5L6 21l3-2 3 2 3-2 3 2-1.5-6c2-1 3.5-3 3.5-5.5C21 6 17.5 3 12 3z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </div>
+                  <Logo className="size-5 shrink-0 text-accent-600" />
                   <div className="space-y-1.5">
                     <span className="text-[7px] font-semibold uppercase tracking-[0.06em] text-accent-500" style={{ fontFamily: 'var(--font-mono)' }}>OpenVitals AI</span>
                     <div className="rounded-[4px_12px_12px_12px] border border-neutral-200 bg-white px-3 py-2 text-[11px] leading-[1.6] text-neutral-700" style={{ fontFamily: 'var(--font-body)' }}>

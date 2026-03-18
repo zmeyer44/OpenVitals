@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Logo } from '@/assets/app/images/logo';
 
 export function Footer() {
   return (
@@ -7,9 +8,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-1.5 mb-4">
-              <div className="flex size-5 items-center justify-center rounded" style={{ background: 'linear-gradient(135deg, #3162FF, #1D3DB3)' }}>
-                <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M12 3C7.5 3 4 6 4 9.5c0 2.5 1.5 4.5 3.5 5.5L6 21l3-2 3 2 3-2 3 2-1.5-6c2-1 3.5-3 3.5-5.5C21 6 17.5 3 12 3z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
+              <Logo className="size-5" />
               <span className="text-[12px] font-medium text-neutral-700" style={{ fontFamily: 'var(--font-display)' }}>OpenVitals</span>
             </div>
             <p className="text-[11px] text-neutral-400" style={{ fontFamily: 'var(--font-mono)' }}>Your data, your control.</p>
