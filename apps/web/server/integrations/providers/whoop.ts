@@ -9,7 +9,7 @@ import type {
 
 const AUTH_URL = 'https://api.prod.whoop.com/oauth/oauth2/auth';
 const TOKEN_URL = 'https://api.prod.whoop.com/oauth/oauth2/token';
-const API_BASE = 'https://api.prod.whoop.com/developer/v1';
+const API_BASE = 'https://api.prod.whoop.com/developer/v2';
 
 const SCOPES = [
   'read:recovery',
@@ -111,12 +111,12 @@ const whoopProvider: IntegrationProvider = {
     const data = await res.json() as Record<string, unknown>;
 
     const accessToken = (data.access_token ?? data.accessToken) as string | undefined;
-    const refreshToken = (data.refresh_token ?? data.refreshToken) as string | undefined;
+    const refreshToken = (data.refresh_token ?? data.refreshToken ?? '') as string;
     const expiresIn = (data.expires_in ?? data.expiresIn ?? 3600) as number;
 
-    if (!accessToken || !refreshToken) {
+    if (!accessToken) {
       throw new Error(
-        `Token exchange returned missing tokens. Keys: ${Object.keys(data).join(', ')}`,
+        `Token exchange returned no access_token. Keys: ${Object.keys(data).join(', ')}`,
       );
     }
 
@@ -147,12 +147,12 @@ const whoopProvider: IntegrationProvider = {
     const data = await res.json() as Record<string, unknown>;
 
     const accessToken = (data.access_token ?? data.accessToken) as string | undefined;
-    const newRefreshToken = (data.refresh_token ?? data.refreshToken) as string | undefined;
+    const newRefreshToken = (data.refresh_token ?? data.refreshToken ?? '') as string;
     const expiresIn = (data.expires_in ?? data.expiresIn ?? 3600) as number;
 
-    if (!accessToken || !newRefreshToken) {
+    if (!accessToken) {
       throw new Error(
-        `Token refresh returned missing tokens. Keys: ${Object.keys(data).join(', ')}`,
+        `Token refresh returned no access_token. Keys: ${Object.keys(data).join(', ')}`,
       );
     }
 
@@ -195,8 +195,9 @@ const whoopProvider: IntegrationProvider = {
     const observations: NormalizedObservation[] = [];
 
     if (resourceType === 'recovery') {
+      // Recovery is fetched by cycle ID
       const rec = (await apiRequest(
-        `${API_BASE}/recovery/${event.resourceId}`,
+        `${API_BASE}/cycle/${event.resourceId}/recovery`,
         accessToken,
       )) as {
         created_at?: string;

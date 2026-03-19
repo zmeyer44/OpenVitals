@@ -23,28 +23,33 @@ export async function syncProvider(
   connection: ConnectionRow,
   provider: IntegrationProvider,
 ): Promise<{ count: number }> {
-  if (!connection.accessTokenEnc || !connection.refreshTokenEnc) {
-    throw new Error('Connection has no tokens');
+  if (!connection.accessTokenEnc) {
+    throw new Error('Connection has no access token');
   }
 
   let accessToken = decrypt(connection.accessTokenEnc);
-  const refreshToken = decrypt(connection.refreshTokenEnc);
+  const refreshToken = connection.refreshTokenEnc
+    ? decrypt(connection.refreshTokenEnc)
+    : null;
 
-  // Refresh tokens if expired (with 5-minute buffer)
+  // Refresh tokens if expired (with 5-minute buffer) and refresh token available
   const now = new Date();
   const buffer = 5 * 60 * 1000;
   if (
+    refreshToken &&
     connection.tokenExpiresAt &&
     connection.tokenExpiresAt.getTime() - buffer < now.getTime()
   ) {
     const newTokens = await provider.refreshTokens(refreshToken);
     const encAccess = encrypt(newTokens.accessToken);
-    const encRefresh = encrypt(newTokens.refreshToken);
+    const encRefresh = newTokens.refreshToken
+      ? encrypt(newTokens.refreshToken)
+      : connection.refreshTokenEnc;
 
     await updateConnectionTokens(db, {
       id: connection.id,
       accessTokenEnc: encAccess,
-      refreshTokenEnc: encRefresh,
+      refreshTokenEnc: encRefresh!,
       tokenExpiresAt: newTokens.expiresAt,
     });
 
@@ -56,16 +61,18 @@ export async function syncProvider(
   try {
     result = await provider.fetchData(accessToken, connection.lastSyncCursor);
   } catch (err: unknown) {
-    if (err instanceof Error && err.message.includes('401')) {
+    if (err instanceof Error && err.message.includes('401') && refreshToken) {
       // Try refreshing and retrying once
       const newTokens = await provider.refreshTokens(refreshToken);
       const encAccess = encrypt(newTokens.accessToken);
-      const encRefresh = encrypt(newTokens.refreshToken);
+      const encRefresh = newTokens.refreshToken
+        ? encrypt(newTokens.refreshToken)
+        : connection.refreshTokenEnc;
 
       await updateConnectionTokens(db, {
         id: connection.id,
         accessTokenEnc: encAccess,
-        refreshTokenEnc: encRefresh,
+        refreshTokenEnc: encRefresh!,
         tokenExpiresAt: newTokens.expiresAt,
       });
 

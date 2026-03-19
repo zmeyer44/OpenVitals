@@ -84,13 +84,15 @@ export async function GET(
 
     // Encrypt tokens before storing
     const accessTokenEnc = encrypt(tokens.accessToken);
-    const refreshTokenEnc = encrypt(tokens.refreshToken);
+    const refreshTokenEnc = tokens.refreshToken
+      ? encrypt(tokens.refreshToken)
+      : '';
 
     // Fetch user profile from provider for providerUserId
     let providerUserId = 'unknown';
     try {
       const profileRes = await fetch(
-        'https://api.prod.whoop.com/developer/v1/user/profile/basic',
+        'https://api.prod.whoop.com/developer/v2/user/profile/basic',
         { headers: { Authorization: `Bearer ${tokens.accessToken}` } },
       );
       if (profileRes.ok) {
