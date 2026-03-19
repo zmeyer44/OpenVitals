@@ -12,10 +12,11 @@ export function MiniSparkline({ data, color, width = 120, height = 32 }: MiniSpa
   const max = Math.max(...data);
   const range = max - min || 1;
 
+  const pad = 4;
   const points = data
     .map((v, i) => {
-      const x = (i / (data.length - 1)) * width;
-      const y = height - 4 - ((v - min) / range) * (height - 8);
+      const x = pad + (i / (data.length - 1)) * (width - pad * 2);
+      const y = pad + (1 - (v - min) / range) * (height - pad * 2);
       return `${x},${y}`;
     })
     .join(' ');

@@ -3,14 +3,17 @@
 import { trpc } from '@/lib/trpc/client';
 import { TitleActionHeader } from '@/components/title-action-header';
 import { MetricCard } from '@/components/health/metric-card';
-import { LabResultRow, LabResultHeader } from '@/components/health/lab-result-row';
-import { ProvenancePill } from '@/components/health/provenance-pill';
+import { MetricSummaryCard } from '@/components/health/metric-summary-card';
 import { AnimatedEmptyState } from '@/components/animated-empty-state';
-import { deriveStatus, formatRange, formatRelativeTime } from '@/lib/health-utils';
+import { deriveStatus, formatRange } from '@/lib/health-utils';
 import { formatDate } from '@/lib/utils';
 import { TestTubes, Droplets, Activity, Microscope, FlaskConical, Dna } from 'lucide-react';
 
 const emptyIcons = [TestTubes, Droplets, Activity, Microscope, FlaskConical, Dna];
+
+function formatMetricName(code: string) {
+  return code.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 export default function LabsPage() {
   const { data, isLoading } = trpc.observations.list.useQuery({ limit: 200 });
@@ -25,7 +28,11 @@ export default function LabsPage() {
             <div key={i} className="h-36 animate-pulse rounded-xl border border-neutral-200 bg-neutral-50" />
           ))}
         </div>
-        <div className="h-64 animate-pulse rounded-xl border border-neutral-200 bg-neutral-50" />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-40 animate-pulse rounded-xl border border-neutral-200 bg-neutral-50" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -47,7 +54,7 @@ export default function LabsPage() {
     );
   }
 
-  // Group observations by metricCode for MetricCards
+  // Group observations by metricCode
   const byMetric = new Map<string, typeof items>();
   for (const item of items) {
     const existing = byMetric.get(item.metricCode) ?? [];
@@ -55,75 +62,112 @@ export default function LabsPage() {
     byMetric.set(item.metricCode, existing);
   }
 
-  // Build metric cards from unique metrics (top 4)
-  const metricCards = Array.from(byMetric.entries()).slice(0, 4).map(([code, obs]) => {
-    const sorted = [...obs].sort((a, b) => new Date(b.observedAt).getTime() - new Date(a.observedAt).getTime());
+  // Sort each group by date descending
+  const metricGroups = Array.from(byMetric.entries()).map(([code, obs]) => {
+    const sorted = [...obs].sort(
+      (a, b) => new Date(b.observedAt).getTime() - new Date(a.observedAt).getTime(),
+    );
     const latest = sorted[0]!;
     const previous = sorted[1];
+    const status = deriveStatus(latest);
     const sparkData = sorted.slice(0, 6).reverse().map((o) => o.valueNumeric ?? 0);
-    const deltaVal = previous?.valueNumeric != null && latest.valueNumeric != null
-      ? Math.abs(latest.valueNumeric - previous.valueNumeric)
-      : 0;
-    const deltaDir = previous?.valueNumeric != null && latest.valueNumeric != null
-      ? latest.valueNumeric > previous.valueNumeric ? 'up' as const
-        : latest.valueNumeric < previous.valueNumeric ? 'down' as const
-        : 'stable' as const
-      : 'stable' as const;
 
-    return {
-      title: code.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-      value: latest.valueNumeric != null ? String(latest.valueNumeric) : latest.valueText ?? '—',
-      unit: latest.unit ?? '',
-      delta: deltaVal ? `${deltaVal % 1 === 0 ? deltaVal : deltaVal.toFixed(1)} from last` : 'No prior',
-      deltaDirection: deltaDir,
-      sparkData: sparkData.length >= 2 ? sparkData : [0, ...sparkData],
-      status: deriveStatus(latest),
-    };
+    const deltaVal =
+      previous?.valueNumeric != null && latest.valueNumeric != null
+        ? Math.abs(latest.valueNumeric - previous.valueNumeric)
+        : 0;
+    const deltaDir =
+      previous?.valueNumeric != null && latest.valueNumeric != null
+        ? latest.valueNumeric > previous.valueNumeric
+          ? ('up' as const)
+          : latest.valueNumeric < previous.valueNumeric
+            ? ('down' as const)
+            : ('stable' as const)
+        : ('stable' as const);
+
+    return { code, sorted, latest, status, sparkData, deltaVal, deltaDir, count: obs.length };
   });
 
+  // Sort: abnormal first → most results → alphabetical
+  metricGroups.sort((a, b) => {
+    const aAbnormal = a.status !== 'normal' ? 1 : 0;
+    const bAbnormal = b.status !== 'normal' ? 1 : 0;
+    if (bAbnormal !== aAbnormal) return bAbnormal - aAbnormal;
+    if (b.count !== a.count) return b.count - a.count;
+    return a.code.localeCompare(b.code);
+  });
+
+  // Top 4 for MetricCards (prioritize abnormal)
+  const topMetrics = metricGroups.slice(0, 4);
+
   // Subtitle
-  const latestDate = items[0] ? formatDate(items[0].observedAt) : '';
-  const subtitle = `${items.length} results${latestDate ? ` · Latest from ${latestDate}` : ''}`;
+  const uniqueMetrics = byMetric.size;
+  const subtitle = `${uniqueMetrics} unique metric${uniqueMetrics !== 1 ? 's' : ''} · ${items.length} total results`;
 
   return (
-    <div>
+    <div className="stagger-children">
       <TitleActionHeader title="Lab Results" subtitle={subtitle} />
 
-      {metricCards.length > 0 && (
+      {/* Top metric cards */}
+      {topMetrics.length > 0 && (
         <div className="mt-7 mb-7 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
-          {metricCards.map((mc) => (
-            <MetricCard key={mc.title} {...mc} />
+          {topMetrics.map((mg) => (
+            <MetricCard
+              key={mg.code}
+              title={formatMetricName(mg.code)}
+              value={
+                mg.latest.valueNumeric != null
+                  ? String(mg.latest.valueNumeric)
+                  : mg.latest.valueText ?? '—'
+              }
+              unit={mg.latest.unit ?? ''}
+              delta={
+                mg.deltaVal
+                  ? `${mg.deltaVal % 1 === 0 ? mg.deltaVal : mg.deltaVal.toFixed(1)} from last`
+                  : 'No prior'
+              }
+              deltaDirection={mg.deltaDir}
+              sparkData={mg.sparkData.length >= 2 ? mg.sparkData : [0, ...mg.sparkData]}
+              status={mg.status}
+            />
           ))}
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
-        <LabResultHeader />
-        {items.map((item) => {
-          const status = deriveStatus(item);
-          const sparkObs = byMetric.get(item.metricCode) ?? [];
-          const trend = [...sparkObs]
-            .sort((a, b) => new Date(a.observedAt).getTime() - new Date(b.observedAt).getTime())
-            .slice(-6)
-            .map((o) => o.valueNumeric ?? 0);
+      {/* Grouped metric summary cards */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {metricGroups.map((mg) => {
+          const statusLabel =
+            mg.status === 'critical'
+              ? 'High'
+              : mg.status === 'warning'
+                ? 'Abnormal'
+                : 'Normal';
 
           return (
-            <LabResultRow
-              key={item.id}
-              metric={item.metricCode.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
-              value={item.valueNumeric != null ? String(item.valueNumeric) : item.valueText ?? '—'}
-              unit={item.unit ?? ''}
-              range={formatRange(item.referenceRangeLow, item.referenceRangeHigh, item.unit)}
-              trend={trend.length >= 2 ? trend : [0, ...trend]}
-              status={status}
-              date={formatDate(item.observedAt)}
+            <MetricSummaryCard
+              key={mg.code}
+              metricCode={mg.code}
+              name={formatMetricName(mg.code)}
+              latestValue={
+                mg.latest.valueNumeric != null
+                  ? String(mg.latest.valueNumeric)
+                  : mg.latest.valueText ?? '—'
+              }
+              unit={mg.latest.unit ?? ''}
+              status={mg.status}
+              statusLabel={statusLabel}
+              resultCount={mg.count}
+              sparkData={mg.sparkData.length >= 2 ? mg.sparkData : [0, ...mg.sparkData]}
+              referenceRange={formatRange(
+                mg.latest.referenceRangeLow,
+                mg.latest.referenceRangeHigh,
+                mg.latest.unit,
+              )}
+              latestDate={formatDate(mg.latest.observedAt)}
             />
           );
         })}
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        <ProvenancePill label={`${items.length} results shown`} icon="⊟" />
       </div>
     </div>
   );

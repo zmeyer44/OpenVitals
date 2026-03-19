@@ -30,7 +30,7 @@ export function TopNav() {
       <div className="max-w-[1400px] h-(--top-nav-height) mx-auto px-4">
         <div className="flex h-full items-center justify-between gap-4">
           {/* Logo + Navigation */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 md:ml-2">
             <Logo />
             <PrimaryNav pathname={pathname} />
           </div>
