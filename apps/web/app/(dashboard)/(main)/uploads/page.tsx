@@ -4,13 +4,86 @@ import { useState, useCallback } from 'react';
 import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '@openvitals/common';
 import { trpc } from '@/lib/trpc/client';
 import { TitleActionHeader } from '@/components/title-action-header';
-import { ImportJobRow, ImportJobHeader } from '@/components/health/import-job-row';
+import { DataTable, type DataTableColumn } from '@/components/data-table';
+import { StatusBadge } from '@/components/health/status-badge';
 import { AnimatedEmptyState } from '@/components/animated-empty-state';
 import { formatRelativeTime } from '@/lib/health-utils';
-import { DOC_TYPE_LABELS } from '@/lib/constants';
-import { FileText, FileUp, FileScan, FileCheck, FileSearch, FileArchive } from 'lucide-react';
+import { DOC_TYPE_LABELS, IMPORT_JOB_STATUS_MAP } from '@/lib/constants';
+import { FileText, FileUp, FileScan, FileCheck, FileSearch, FileArchive, Trash2 } from 'lucide-react';
 
 const emptyIcons = [FileText, FileUp, FileScan, FileCheck, FileSearch, FileArchive];
+
+type ImportJob = {
+  id: string;
+  status: string;
+  classifiedType: string | null;
+  classificationConfidence: number | null;
+  extractionCount: number | null;
+  needsReview: boolean | null;
+  errorMessage: string | null;
+  createdAt: Date | null;
+  parseCompletedAt: Date | null;
+  completedAt: Date | null;
+  fileName: string;
+  mimeType: string;
+  fileSize: number | null;
+};
+
+const importColumns: DataTableColumn<ImportJob>[] = [
+  {
+    id: 'file',
+    header: 'File',
+    width: '1.8fr',
+    cell: (job) => (
+      <div>
+        <div className="text-sm font-medium text-neutral-900 font-body">{job.fileName}</div>
+        <div className="mt-0.5 text-[11px] text-neutral-400 font-mono">
+          {job.createdAt ? formatRelativeTime(job.createdAt) : '—'}
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 'docType',
+    header: 'Document type',
+    width: '1fr',
+    cell: (job) => (
+      <span className="text-xs text-neutral-600 font-mono">
+        {DOC_TYPE_LABELS[job.classifiedType ?? ''] ?? job.classifiedType ?? '—'}
+      </span>
+    ),
+  },
+  {
+    id: 'status',
+    header: 'Status',
+    width: '0.8fr',
+    cell: (job) => {
+      const s = IMPORT_JOB_STATUS_MAP[job.status] ?? IMPORT_JOB_STATUS_MAP.completed!;
+      return <StatusBadge status={s.badge} label={s.label} />;
+    },
+  },
+  {
+    id: 'confidence',
+    header: 'Confidence',
+    width: '0.6fr',
+    cell: (job) => (
+      <span className="text-xs text-neutral-500 font-mono">
+        {job.classificationConfidence != null ? job.classificationConfidence.toFixed(2) : '—'}
+      </span>
+    ),
+  },
+  {
+    id: 'extracted',
+    header: 'Extracted',
+    width: '0.8fr',
+    align: 'right',
+    cell: (job) => (
+      <span className="text-[13px] font-semibold text-accent-600 font-mono">
+        {job.extractionCount != null ? `${job.extractionCount} records` : '— records'}
+      </span>
+    ),
+  },
+];
 
 export default function UploadsPage() {
   const [dragActive, setDragActive] = useState(false);
@@ -143,31 +216,35 @@ export default function UploadsPage() {
         <h2 className="mb-4 text-lg font-medium tracking-[-0.015em] text-neutral-900 font-display">
           Recent imports
         </h2>
-        {jobsLoading ? (
-          <div className="h-40 animate-pulse rounded-xl border border-neutral-200 bg-neutral-50" />
-        ) : recentJobs.length === 0 ? (
+        {recentJobs.length === 0 && !jobsLoading ? (
           <AnimatedEmptyState
             title="No imports yet"
             description="Upload a document above to start processing."
             cardIcon={({ index }) => emptyIcons[index % emptyIcons.length]!}
           />
         ) : (
-          <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
-            <ImportJobHeader />
-            {recentJobs.map((job) => (
-              <ImportJobRow
-                key={job.id}
-                id={job.id}
-                fileName={job.fileName}
-                status={job.status}
-                docType={DOC_TYPE_LABELS[job.classifiedType ?? ''] ?? job.classifiedType ?? '—'}
-                confidence={job.classificationConfidence != null ? String(job.classificationConfidence.toFixed(2)) : '—'}
-                extractions={job.extractionCount != null ? String(job.extractionCount) : '—'}
-                time={job.createdAt ? formatRelativeTime(job.createdAt) : '—'}
-                onDelete={() => deleteImport.mutate({ id: job.id })}
-              />
-            ))}
-          </div>
+          <DataTable<ImportJob>
+            data={recentJobs}
+            loading={jobsLoading}
+            columns={importColumns}
+            rowConfig={{
+              getRowKey: (job) => job.id,
+              getRowHref: (job) => `/uploads/${job.id}`,
+              renderActions: (job) => (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deleteImport.mutate({ id: job.id });
+                  }}
+                  className="p-1 rounded text-neutral-400 hover:text-red-500 hover:bg-red-50"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              ),
+            }}
+            hasActionColumn
+            actionColumnWidth="2rem"
+          />
         )}
       </div>
     </div>
