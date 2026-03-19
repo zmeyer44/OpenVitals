@@ -133,7 +133,7 @@ test.describe('Onboarding flow: new account → complete all steps → dashboard
     await context.close();
   });
 
-  test('7. "Go to your dashboard" navigates to timeline', async ({ browser }) => {
+  test('7. "Go to your dashboard" navigates to home', async ({ browser }) => {
     const context = await browser.newContext({ storageState: authFile });
     const page = await context.newPage();
 
@@ -143,19 +143,19 @@ test.describe('Onboarding flow: new account → complete all steps → dashboard
     await expect(page.getByText("You're all set")).toBeVisible({ timeout: 10000 });
     await page.getByRole('button', { name: 'Go to your dashboard' }).click();
 
-    await page.waitForURL('**/timeline', { timeout: 10000 });
+    await page.waitForURL('**/home', { timeout: 10000 });
     await page.screenshot({ path: 'e2e/screenshots/onboard-7-dashboard.png', fullPage: true });
 
     await page.context().storageState({ path: authFile });
     await context.close();
   });
 
-  test('8. after completion, /onboarding redirects to /timeline', async ({ browser }) => {
+  test('8. after completion, /onboarding redirects to /home', async ({ browser }) => {
     const context = await browser.newContext({ storageState: authFile });
     const page = await context.newPage();
 
     await page.goto('/onboarding');
-    await page.waitForURL('**/timeline', { timeout: 10000 });
+    await page.waitForURL('**/home', { timeout: 10000 });
     await page.screenshot({ path: 'e2e/screenshots/onboard-8-no-reenter.png', fullPage: true });
 
     // Dashboard routes work normally now

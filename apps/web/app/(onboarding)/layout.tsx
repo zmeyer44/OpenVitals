@@ -28,7 +28,7 @@ export default async function OnboardingLayout({
     .limit(1);
 
   if (user && user.onboardingStep >= ONBOARDING_COMPLETE) {
-    redirect('/timeline');
+    redirect('/home');
   }
 
   return <>{children}</>;

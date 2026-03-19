@@ -1,4 +1,5 @@
 import {
+  LayoutDashboard,
   Clock,
   TestTubes,
   Pill,
@@ -19,6 +20,7 @@ export interface NavItem {
 
 // Primary navigation — main dashboard sections
 export const navigation: NavItem[] = [
+  { name: "Home", href: "/home", icon: LayoutDashboard },
   { name: "Timeline", href: "/timeline", icon: Clock },
   { name: "Labs", href: "/labs", icon: TestTubes },
   { name: "Medications", href: "/medications", icon: Pill },

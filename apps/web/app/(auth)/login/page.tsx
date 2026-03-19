@@ -22,7 +22,7 @@ export default function LoginPage() {
         toast.error(error.message ?? "Invalid email or password");
         return;
       }
-      router.push("/timeline");
+      router.push("/home");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -31,7 +31,7 @@ export default function LoginPage() {
   }
 
   async function handleGoogleSignIn() {
-    await signIn.social({ provider: "google", callbackURL: "/timeline" });
+    await signIn.social({ provider: "google", callbackURL: "/home" });
   }
 
   return (

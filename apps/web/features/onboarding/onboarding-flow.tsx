@@ -108,7 +108,7 @@ export function OnboardingFlow() {
 
   const handleComplete = useCallback(() => {
     persistStep(ONBOARDING_COMPLETE);
-    router.push('/timeline');
+    router.push('/home');
   }, [persistStep, router]);
 
   const completedSections = (() => {
