@@ -8,7 +8,7 @@ import {
   Settings,
   ListChecks,
   type LucideIcon,
-} from 'lucide-react';
+} from "lucide-react";
 
 export interface NavItem {
   name: string;
@@ -19,22 +19,22 @@ export interface NavItem {
 
 // Primary navigation — main dashboard sections
 export const navigation: NavItem[] = [
-  { name: 'Timeline', href: '/timeline', icon: Clock },
-  { name: 'Labs', href: '/labs', icon: TestTubes },
-  { name: 'Medications', href: '/medications', icon: Pill },
-  { name: 'Uploads', href: '/uploads', icon: Upload },
+  { name: "Timeline", href: "/timeline", icon: Clock },
+  { name: "Labs", href: "/labs", icon: TestTubes },
+  { name: "Medications", href: "/medications", icon: Pill },
+  { name: "Uploads", href: "/uploads", icon: Upload },
 ];
 
 // Secondary nav — less frequently used
 export const secondaryNav: NavItem[] = [
-  { name: 'Biomarkers', href: '/biomarkers', icon: ListChecks },
-  { name: 'Sharing', href: '/sharing', icon: Share2 },
-  { name: 'AI Chat', href: '/ai', icon: MessageSquare },
+  { name: "Biomarkers", href: "/biomarkers", icon: ListChecks },
+  // { name: 'Sharing', href: '/sharing', icon: Share2 },
+  { name: "AI Chat", href: "/ai", icon: MessageSquare },
 ];
 
 // All mobile nav items
 export const allMobileNav: NavItem[] = [
   ...navigation,
   ...secondaryNav,
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
