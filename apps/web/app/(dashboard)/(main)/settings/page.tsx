@@ -57,7 +57,7 @@ export default function SettingsPage() {
     <div>
       <TitleActionHeader title="Settings" subtitle="Manage your preferences." />
 
-      <div className="max-w-lg space-y-6">
+      <div className="mt-7 max-w-lg space-y-6">
         {/* General Preferences */}
         <div className="rounded-xl border border-neutral-200 bg-white p-6 space-y-6">
           <h2 className="text-lg font-medium tracking-[-0.015em] text-neutral-900 font-display">

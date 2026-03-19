@@ -3,9 +3,16 @@
 import { useState } from 'react';
 import { trpc } from '@/lib/trpc/client';
 import { TitleActionHeader } from '@/components/title-action-header';
-import { EmptyState } from '@/components/empty-state';
+import { AnimatedEmptyState } from '@/components/animated-empty-state';
 import { StatusBadge } from '@/components/health/status-badge';
-import { Search, ChevronDown, ChevronRight } from 'lucide-react';
+import {
+  Search, ChevronDown, ChevronRight,
+  ListChecks, Dna, Activity, Beaker, FlaskConical, Microscope,
+  Droplets, Bug, Sun, CircleDot, Gauge, Syringe, Flame, HeartPulse, TestTubes, BarChart3,
+  type LucideIcon,
+} from 'lucide-react';
+
+const emptyIcons = [ListChecks, Dna, Activity, Beaker, FlaskConical, Microscope];
 
 const categoryLabels: Record<string, string> = {
   metabolic: 'Metabolic',
@@ -23,20 +30,20 @@ const categoryLabels: Record<string, string> = {
   vital_sign: 'Vital Signs',
 };
 
-const categoryIcons: Record<string, string> = {
-  metabolic: '🧬',
-  hematology: '🩸',
-  lipid: '💧',
-  thyroid: '🦋',
-  iron_study: '⚙️',
-  vitamin: '☀️',
-  hepatic: '🫁',
-  renal: '🫘',
-  hormone: '⚗️',
-  inflammation: '🔥',
-  cardiac: '❤️',
-  urinalysis: '🧪',
-  vital_sign: '📊',
+const categoryIcons: Record<string, LucideIcon> = {
+  metabolic: Dna,
+  hematology: Droplets,
+  lipid: Beaker,
+  thyroid: Bug,
+  iron_study: FlaskConical,
+  vitamin: Sun,
+  hepatic: CircleDot,
+  renal: Gauge,
+  hormone: Syringe,
+  inflammation: Flame,
+  cardiac: HeartPulse,
+  urinalysis: TestTubes,
+  vital_sign: BarChart3,
 };
 
 function formatRange(low: number | null, high: number | null, unit: string | null): string {
@@ -78,11 +85,13 @@ export default function BiomarkersPage() {
     return (
       <div>
         <TitleActionHeader title="Biomarkers" subtitle="Metric definitions and reference ranges." />
-        <EmptyState
-          icon="📋"
-          title="No metrics defined"
-          description="Run db:seed to populate metric definitions and reference ranges."
-        />
+        <div className="mt-7">
+          <AnimatedEmptyState
+            title="No metrics defined"
+            description="Run db:seed to populate metric definitions and reference ranges."
+            cardIcon={({ index }) => emptyIcons[index % emptyIcons.length]!}
+          />
+        </div>
       </div>
     );
   }
@@ -130,7 +139,7 @@ export default function BiomarkersPage() {
       <TitleActionHeader title="Biomarkers" subtitle={subtitle} />
 
       {/* Search */}
-      <div className="relative mb-6 max-w-md">
+      <div className="relative mt-7 mb-6 max-w-md">
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
         <input
           type="text"
@@ -142,17 +151,17 @@ export default function BiomarkersPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState
-          icon="🔍"
+        <AnimatedEmptyState
           title="No matches"
           description={`No metrics matching "${search}". Try a different term.`}
+          cardIcon={({ index }) => emptyIcons[index % emptyIcons.length]!}
         />
       ) : (
         <div className="space-y-3">
           {sortedCategories.map((cat) => {
             const catMetrics = byCategory.get(cat)!;
             const isExpanded = expandedCategory === cat || lower.length > 0;
-            const icon = categoryIcons[cat] ?? '📋';
+            const IconComponent = categoryIcons[cat] ?? ListChecks;
             const label = categoryLabels[cat] ?? cat;
 
             return (
@@ -164,7 +173,9 @@ export default function BiomarkersPage() {
                   className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-neutral-50 cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-lg">{icon}</span>
+                    <div className="flex size-8 items-center justify-center rounded-lg bg-neutral-100">
+                      <IconComponent className="size-4 text-neutral-500" />
+                    </div>
                     <div className="text-left">
                       <div className="text-[15px] font-semibold text-neutral-900 font-body">
                         {label}

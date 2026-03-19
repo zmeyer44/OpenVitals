@@ -108,9 +108,9 @@ export default function UploadsPage() {
 
       {error && <div className="mt-7 mb-4 rounded-lg bg-[var(--color-health-critical-bg)] border border-[var(--color-health-critical-border)] p-3 text-sm text-[var(--color-health-critical)]">{error}</div>}
 
-      <div className="mt-7"
+      <div
         onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}
-        className={`rounded-xl border-2 border-dashed bg-white p-12 text-center transition-colors ${dragActive ? 'border-accent-500 bg-accent-50' : 'border-neutral-300 hover:border-neutral-400'}`}
+        className={`mt-7 rounded-xl border-2 border-dashed bg-white p-12 text-center transition-colors ${dragActive ? 'border-accent-500 bg-accent-50' : 'border-neutral-300 hover:border-neutral-400'}`}
       >
         <p className="text-sm font-medium text-neutral-900 font-body">Drop files here</p>
         <p className="mt-1 text-sm text-neutral-500">or</p>
