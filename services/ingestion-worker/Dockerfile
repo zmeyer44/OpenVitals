@@ -32,8 +32,9 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY --from=base /app/node_modules ./node_modules
+COPY --from=base /app/services/ingestion-worker/node_modules ./services/ingestion-worker/node_modules
 COPY --from=base /app/services/ingestion-worker/dist ./dist
-COPY --from=base /app/packages ./packages
+COPY --from=base /app/services/ingestion-worker/package.json ./package.json
 
 EXPOSE 4000
 
