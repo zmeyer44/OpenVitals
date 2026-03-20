@@ -19,6 +19,7 @@ export function FinalCta() {
             Get started for free
           </Link>
           <a
+          target="_blank"
             href={GITHUB_URL}
             className="rounded-md px-4 py-2 text-[13px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors font-body"
           >

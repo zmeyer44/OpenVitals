@@ -25,7 +25,7 @@ export function Hero() {
         <Link href="/register">
           <Button variant="default" text="Start tracking for free" />
         </Link>
-        <Link href={GITHUB_URL}>
+        <Link target="_blank" href={GITHUB_URL}>
           <Button variant="ghost" text="Star us on GitHub →" />
         </Link>
       </div>
