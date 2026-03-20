@@ -75,6 +75,16 @@
   --color-health-optimal-bg: #f5f3ff;
   --color-health-optimal-border: #ddd6fe;
 
+  /* Testing urgency — aliases to health colors */
+  --color-testing-overdue: var(--color-health-critical);
+  --color-testing-overdue-bg: var(--color-health-critical-bg);
+  --color-testing-due: var(--color-health-warning);
+  --color-testing-due-bg: var(--color-health-warning-bg);
+  --color-testing-upcoming: var(--color-health-info);
+  --color-testing-upcoming-bg: var(--color-health-info-bg);
+  --color-testing-on-track: var(--color-health-normal);
+  --color-testing-on-track-bg: var(--color-health-normal-bg);
+
   /* Radius */
   --radius-xs: 3px;
   --radius-sm: 4px;

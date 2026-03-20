@@ -9,6 +9,7 @@ import {
   Settings,
   ListChecks,
   Cable,
+  Microscope,
   type LucideIcon,
 } from "lucide-react";
 
@@ -31,6 +32,7 @@ export const navigation: NavItem[] = [
 // Secondary nav — less frequently used
 export const secondaryNav: NavItem[] = [
   { name: "Biomarkers", href: "/biomarkers", icon: ListChecks },
+  { name: "Testing", href: "/testing", icon: Microscope },
   // { name: 'Sharing', href: '/sharing', icon: Share2 },
   { name: "AI Chat", href: "/ai", icon: MessageSquare },
 ];

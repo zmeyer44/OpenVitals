@@ -6,9 +6,19 @@ import {
   optimalRanges,
 } from "../schema/metrics";
 import { shareTemplates } from "../schema/sharing";
+import {
+  labProviders,
+  panelTemplates,
+  panelTemplateMetrics,
+} from "../schema/testing";
 import { metricDefinitionSeeds } from "./data/metric-definitions";
 import { referenceRangeSeeds } from "./data/reference-ranges";
 import { optimalRangeSeeds } from "./data/optimal-ranges";
+import { labProviderSeeds } from "./data/lab-providers";
+import {
+  panelTemplateSeeds,
+  panelTemplateMetricSeeds,
+} from "./data/panel-templates";
 
 async function main() {
   const db = getDb();
@@ -128,6 +138,21 @@ async function main() {
         sortOrder: 5,
       },
     ])
+    .onConflictDoNothing();
+
+  console.log("Seeding lab providers...");
+  await db.insert(labProviders).values(labProviderSeeds).onConflictDoNothing();
+
+  console.log("Seeding panel templates...");
+  await db
+    .insert(panelTemplates)
+    .values(panelTemplateSeeds)
+    .onConflictDoNothing();
+
+  console.log("Seeding panel template metrics...");
+  await db
+    .insert(panelTemplateMetrics)
+    .values(panelTemplateMetricSeeds)
     .onConflictDoNothing();
 
   console.log("Seed completed successfully.");

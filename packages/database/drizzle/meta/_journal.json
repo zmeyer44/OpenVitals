@@ -50,6 +50,13 @@
       "when": 1774027269079,
       "tag": "0006_right_nehzno",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1774028442270,
+      "tag": "0007_unusual_purple_man",
+      "breakpoints": true
     }
   ]
 }

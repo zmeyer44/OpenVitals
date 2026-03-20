@@ -2,6 +2,7 @@ import { z } from "zod";
 import { eq, and } from "drizzle-orm";
 import { createRouter, protectedProcedure } from "../init";
 import { optimalRanges, userOptimalRanges, users } from "@openvitals/database";
+import { computeAge } from "@/lib/demographics";
 
 interface DemographicRange {
   metricCode: string;
@@ -52,18 +53,6 @@ function findBestDemographicRange(
   }
 
   return bestRange;
-}
-
-function computeAge(dateOfBirth: string | null): number | null {
-  if (!dateOfBirth) return null;
-  const dob = new Date(dateOfBirth);
-  const now = new Date();
-  let age = now.getFullYear() - dob.getFullYear();
-  const monthDiff = now.getMonth() - dob.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate())) {
-    age--;
-  }
-  return age;
 }
 
 export const optimalRangesRouter = createRouter({

@@ -76,10 +76,10 @@ export default function HomePage() {
 
   // Onboarding checklist items
   const checklistItems: ChecklistItem[] = [
-    { label: 'Upload a lab report', href: '/uploads', completed: jobItems.length > 0, icon: Upload },
-    { label: 'Add a medication', href: '/medications', completed: medItems.length > 0, icon: Pill },
-    { label: 'Ask AI a question', href: '/ai', completed: false, icon: MessageSquare },
-    { label: 'Review your biomarkers', href: '/biomarkers', completed: obsItems.length > 0, icon: ListChecks },
+    { label: 'Upload a lab report', description: 'Import your lab results from any provider to start tracking your biomarkers over time.', href: '/uploads', completed: jobItems.length > 0, icon: Upload },
+    { label: 'Add a medication', description: 'Track your medications and supplements so AI insights can factor in what you\'re taking.', href: '/medications', completed: medItems.length > 0, icon: Pill },
+    { label: 'Ask AI a question', description: 'Chat with your health data — ask about trends, get explanations, or request a summary.', href: '/ai', completed: false, icon: MessageSquare },
+    { label: 'Review your biomarkers', description: 'Explore your lab results organized by category with reference ranges and trend lines.', href: '/biomarkers', completed: obsItems.length > 0, icon: ListChecks },
   ];
 
   return (
