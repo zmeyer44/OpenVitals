@@ -40,7 +40,10 @@ async function apiRequest(
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   if (!res.ok) {
-    throw new Error(`Whoop API error: ${res.status} ${res.statusText}`);
+    const body = await res.text().catch(() => '');
+    throw new Error(
+      `Whoop API error: ${res.status} ${res.statusText}${body ? ` — ${body}` : ''}`,
+    );
   }
   return res.json();
 }
@@ -100,6 +103,7 @@ const whoopProvider: IntegrationProvider = {
         redirect_uri: redirectUri,
         client_id: getClientId(),
         client_secret: getClientSecret(),
+        scope: SCOPES.join(' '),
       }),
     });
 
@@ -109,6 +113,9 @@ const whoopProvider: IntegrationProvider = {
     }
 
     const data = await res.json() as Record<string, unknown>;
+    console.log(
+      `[whoop] token exchange response keys: ${Object.keys(data).join(', ')}`,
+    );
 
     const accessToken = (data.access_token ?? data.accessToken) as string | undefined;
     const refreshToken = (data.refresh_token ?? data.refreshToken ?? '') as string;
@@ -136,6 +143,7 @@ const whoopProvider: IntegrationProvider = {
         refresh_token: refreshToken,
         client_id: getClientId(),
         client_secret: getClientSecret(),
+        scope: SCOPES.join(' '),
       }),
     });
 

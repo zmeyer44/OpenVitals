@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import {
   Watch,
   Activity,
@@ -239,36 +240,46 @@ function IntegrationCard({
     }
   }, [showMenu]);
 
-  return (
-    <div className="card-elevated flex flex-col">
-      <div className="p-4 flex-1">
-        <div className="flex items-start gap-3">
-          <div
-            className={`w-10 h-10 rounded-xl ${integration.iconBg} flex items-center justify-center shrink-0`}
-          >
-            <Icon className={`h-5 w-5 ${integration.color}`} />
-          </div>
-          <div className="min-w-0">
-            <h3 className="font-display text-[15px] font-semibold text-neutral-900">
-              {integration.name}
-            </h3>
-            <p className="text-[13px] text-neutral-500 mt-0.5 line-clamp-2">
-              {integration.description}
-            </p>
-          </div>
+  const cardBody = (
+    <div className="p-4 flex-1">
+      <div className="flex items-start gap-3">
+        <div
+          className={`w-10 h-10 rounded-xl ${integration.iconBg} flex items-center justify-center shrink-0`}
+        >
+          <Icon className={`h-5 w-5 ${integration.color}`} />
         </div>
-
-        <div className="flex flex-wrap gap-1.5 mt-3">
-          {integration.dataTypes.map((type) => (
-            <span
-              key={type}
-              className="rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-mono text-neutral-600"
-            >
-              {type}
-            </span>
-          ))}
+        <div className="min-w-0">
+          <h3 className="font-display text-[15px] font-semibold text-neutral-900">
+            {integration.name}
+          </h3>
+          <p className="text-[13px] text-neutral-500 mt-0.5 line-clamp-2">
+            {integration.description}
+          </p>
         </div>
       </div>
+
+      <div className="flex flex-wrap gap-1.5 mt-3">
+        {integration.dataTypes.map((type) => (
+          <span
+            key={type}
+            className="rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-mono text-neutral-600"
+          >
+            {type}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="card-elevated flex flex-col">
+      {isConnected ? (
+        <Link href={`/integrations/${integration.id}`} className="flex-1 hover:bg-neutral-50/50 transition-colors rounded-t-xl">
+          {cardBody}
+        </Link>
+      ) : (
+        cardBody
+      )}
 
       <div className="border-t border-neutral-200 px-4 py-3">
         {isConnected ? (
@@ -416,18 +427,25 @@ export default function IntegrationsPage() {
     );
   }
 
-  const filtered = integrationCatalog
-    .filter((i) => {
-      if (activeTab === "all") return true;
-      if (activeTab === "connected") return connectionMap.has(i.id);
-      return i.category === activeTab;
-    })
+  const filtered = integrationCatalog.filter((i) => {
+    if (activeTab === "all") return true;
+    if (activeTab === "connected") return connectionMap.has(i.id);
+    return i.category === activeTab;
+  });
+
+  // Split into active (implemented) and coming soon, with connected first
+  const activeIntegrations = filtered
+    .filter((i) => implementedProviders.has(i.id))
     .sort((a, b) => {
-      const aAvailable = connectionMap.has(a.id) || implementedProviders.has(a.id);
-      const bAvailable = connectionMap.has(b.id) || implementedProviders.has(b.id);
-      if (aAvailable === bAvailable) return 0;
-      return aAvailable ? -1 : 1;
+      const aConnected = connectionMap.has(a.id);
+      const bConnected = connectionMap.has(b.id);
+      if (aConnected === bConnected) return 0;
+      return aConnected ? -1 : 1;
     });
+
+  const comingSoonIntegrations = filtered.filter(
+    (i) => !implementedProviders.has(i.id),
+  );
 
   return (
     <div>
@@ -455,21 +473,46 @@ export default function IntegrationsPage() {
         </div>
       </div>
 
-      <div
-        className="stagger-children mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-        key={activeTab}
-      >
-        {filtered.map((integration) => (
-          <IntegrationCard
-            key={integration.id}
-            integration={integration}
-            connection={connectionMap.get(integration.id)}
-            onSync={handleSync}
-            onDisconnect={handleDisconnect}
-            isSyncing={syncingProvider === integration.id}
-          />
-        ))}
-      </div>
+      {activeIntegrations.length > 0 && (
+        <div
+          className="stagger-children mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          key={`active-${activeTab}`}
+        >
+          {activeIntegrations.map((integration) => (
+            <IntegrationCard
+              key={integration.id}
+              integration={integration}
+              connection={connectionMap.get(integration.id)}
+              onSync={handleSync}
+              onDisconnect={handleDisconnect}
+              isSyncing={syncingProvider === integration.id}
+            />
+          ))}
+        </div>
+      )}
+
+      {comingSoonIntegrations.length > 0 && activeTab !== "connected" && (
+        <>
+          <h2 className="mt-10 mb-4 text-[13px] font-medium text-neutral-400 uppercase tracking-wider">
+            Coming Soon
+          </h2>
+          <div
+            className="stagger-children grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            key={`soon-${activeTab}`}
+          >
+            {comingSoonIntegrations.map((integration) => (
+              <IntegrationCard
+                key={integration.id}
+                integration={integration}
+                connection={undefined}
+                onSync={handleSync}
+                onDisconnect={handleDisconnect}
+                isSyncing={false}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -28,18 +28,26 @@ export async function syncProvider(
   }
 
   let accessToken = decrypt(connection.accessTokenEnc);
-  const refreshToken = connection.refreshTokenEnc
+  let refreshToken = connection.refreshTokenEnc
     ? decrypt(connection.refreshTokenEnc)
     : null;
+
+  const hasRefreshToken = !!refreshToken;
+  const tokenExpiresAt = connection.tokenExpiresAt;
+  console.log(
+    `[sync] ${provider.id}: hasRefreshToken=${hasRefreshToken}, tokenExpiresAt=${tokenExpiresAt?.toISOString() ?? 'null'}`,
+  );
 
   // Refresh tokens if expired (with 5-minute buffer) and refresh token available
   const now = new Date();
   const buffer = 5 * 60 * 1000;
-  if (
+  const needsRefresh =
     refreshToken &&
-    connection.tokenExpiresAt &&
-    connection.tokenExpiresAt.getTime() - buffer < now.getTime()
-  ) {
+    tokenExpiresAt &&
+    tokenExpiresAt.getTime() - buffer < now.getTime();
+
+  if (needsRefresh && refreshToken) {
+    console.log(`[sync] ${provider.id}: proactive token refresh (expired or expiring soon)`);
     const newTokens = await provider.refreshTokens(refreshToken);
     const encAccess = encrypt(newTokens.accessToken);
     const encRefresh = newTokens.refreshToken
@@ -54,6 +62,9 @@ export async function syncProvider(
     });
 
     accessToken = newTokens.accessToken;
+    if (newTokens.refreshToken) {
+      refreshToken = newTokens.refreshToken;
+    }
   }
 
   // Fetch data with 401 retry
@@ -62,6 +73,7 @@ export async function syncProvider(
     result = await provider.fetchData(accessToken, connection.lastSyncCursor);
   } catch (err: unknown) {
     if (err instanceof Error && err.message.includes('401') && refreshToken) {
+      console.log(`[sync] ${provider.id}: 401 received, attempting token refresh and retry`);
       // Try refreshing and retrying once
       const newTokens = await provider.refreshTokens(refreshToken);
       const encAccess = encrypt(newTokens.accessToken);
@@ -81,6 +93,9 @@ export async function syncProvider(
         connection.lastSyncCursor,
       );
     } else {
+      if (err instanceof Error && err.message.includes('401') && !refreshToken) {
+        console.error(`[sync] ${provider.id}: 401 received but no refresh token available — cannot retry`);
+      }
       throw err;
     }
   }
