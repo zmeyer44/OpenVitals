@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: var(--font-display);
-  --font-body: var(--font-body);
-  --font-mono: var(--font-mono);
+  --font-display:
+    var(--font-geist-sans), "Geist Sans", system-ui, sans-serif;
+  --font-body:
+    var(--font-geist-sans), "Geist Sans", system-ui, sans-serif;
+  --font-mono:
+    var(--font-geist-mono), "Geist Mono", "SF Mono", Menlo, monospace;
 
   /* Primary — Ultramarine Blue */
   --color-accent-50: #eef1ff;
@@ -123,6 +126,7 @@
   }
 
   body {
+    font-family: var(--font-body);
     background-color: var(--color-neutral-50);
     color: var(--color-neutral-900);
     line-height: 1.5;

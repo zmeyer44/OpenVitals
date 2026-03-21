@@ -1,30 +1,42 @@
 import Link from "next/link";
-import { GITHUB_URL } from "@/constants/app";
+import { Logo } from "@/assets/app/images/logo";
 
 export function FinalCta() {
   return (
-    <section
-      className="border-t border-neutral-200/50"
-      style={{ backgroundColor: "#F5F4F1" }}
-    >
-      <div className="mx-auto max-w-[1120px] px-6 py-16">
-        <h2 className="text-[clamp(1.6rem,3.5vw,2rem)] font-medium tracking-[-0.025em] text-neutral-900 font-display">
-          Try OpenVitals now.
-        </h2>
-        <div className="mt-5 flex items-center gap-3">
+    <section className="px-6 md:px-10 py-14 lg:py-20">
+      <div className="mx-auto max-w-[1280px]">
+        {/* Dark CTA card */}
+        <div className="bg-neutral-900 px-8 md:px-12 py-12 md:py-16 max-w-md">
+          {/* Card header */}
+          <div className="flex items-center justify-between mb-12">
+            <div className="flex items-center gap-2.5">
+              <div className="size-[7px] rounded-full bg-accent-500" />
+              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-500">
+                Get Started
+              </span>
+            </div>
+            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-neutral-500">
+              Start Tracking
+            </span>
+          </div>
+
+          {/* Logo icon */}
+          <Logo className="size-8 text-white mb-6" />
+
+          {/* Headline */}
+          <h2 className="font-display text-[28px] md:text-[32px] font-medium tracking-[-0.03em] leading-[1.1] text-white">
+            Ready to understand
+            <br />
+            your health data?
+          </h2>
+
+          {/* Button */}
           <Link
             href="/register"
-            className="rounded-md bg-neutral-900 px-4 py-2 text-[13px] font-medium text-white hover:bg-neutral-800 transition-colors font-body"
+            className="mt-8 inline-flex items-center bg-white px-5 py-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-neutral-900 hover:bg-neutral-100 transition-colors"
           >
-            Get started for free
+            Start tracking →
           </Link>
-          <a
-          target="_blank"
-            href={GITHUB_URL}
-            className="rounded-md px-4 py-2 text-[13px] font-medium text-neutral-600 hover:text-neutral-900 transition-colors font-body"
-          >
-            View on GitHub →
-          </a>
         </div>
       </div>
     </section>

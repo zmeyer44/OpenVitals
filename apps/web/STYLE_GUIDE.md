@@ -1,369 +1,263 @@
-# OpenVitals Style Guide
+## Design system tokens
 
-Design system and interface guidelines for the OpenVitals web application.
+### Colors
 
----
+**Primary — Ultramarine Blue**
+- 50: #EEF1FF
+- 100: #D6DCFF
+- 200: #B0BAFF
+- 300: #8295FF
+- 400: #5A75FF
+- 500: #3162FF (primary)
+- 600: #2750D9
+- 700: #1D3DB3
+- 800: #142B8C
+- 900: #0C1A5C
 
-## Typeface pairing
+**Neutral**
+- 0: #FFFFFF
+- 50: #FAFAFA
+- 100: #F2F2F2
+- 200: #E5E5E5
+- 300: #CCCCCC
+- 400: #999999
+- 500: #737373
+- 600: #555555
+- 700: #333333
+- 800: #1F1F1F
+- 900: #141414
+- 950: #0A0A0A
 
-Three font families, each with a strict role. Never swap roles.
+**Health semantic (only used on health data indicators, never in chrome/brand)**
+- Normal: #16A34A
+- Warning: #D97706
+- Critical: #DC2626
+- Info: #3162FF
 
-| Role | Family | CSS variable | Weights | Use for |
-|---|---|---|---|---|
-| **Display** | Source Serif 4 | `var(--font-display)` | 400–700 | Page titles, section headings, hero text, metric card values, insight titles. Italic style for emphasis words in headlines. |
-| **Body** | DM Sans | `var(--font-body)` | 300–600 | Labels, descriptions, navigation, buttons, body text, form fields, card descriptions. This is the default — `<body>` inherits it. |
-| **Data** | IBM Plex Mono | `var(--font-mono)` | 400–600 | Numeric values, units, timestamps, confidence scores, LOINC codes, parser versions, provenance metadata, file names, technical labels. |
+### Typography
+
+Three typefaces, strictly assigned:
+
+1. **Space Mono** (display/headlines): Bold (700), tight letter-spacing (-0.03em to -0.04em). Used for page titles, section headings, hero text, metric card labels, nav wordmark. This is the signature typeface that defines the brutalist feel.
+
+2. **DM Sans** (body/UI): Weights 400-700. Used for paragraph text, descriptions, navigation links, button labels, body copy. Provides warmth and readability against the monospace sharpness.
+
+3. **IBM Plex Mono** (data/values): Weights 400-700. Used for all numbers, values, units, timestamps, codes, confidence scores, status labels, provenance tags. Everything that represents data uses this.
 
 ### Type scale
 
-| Token | Size | Weight | Font | Tracking | Use |
-|---|---|---|---|---|---|
-| Display | 32px | 500 | Display | -0.03em | Hero headlines, page titles |
-| Heading 1 | 24px | 500 | Display | -0.02em | Section headings |
-| Heading 2 | 18px | 500 | Display | -0.015em | Sub-section headings |
-| Heading 3 | 15px | 550 | Body | 0 | Card titles, sidebar group labels |
-| Body | 14px | 400 | Body | 0.005em | Descriptions, paragraphs |
-| Small | 13px | 400 | Body | 0.005em | Secondary text, links, button text |
-| Data value | 16px | 600 | Mono | -0.01em | Lab values, metric numbers |
-| Data label | 12px | 400 | Mono | 0.02em | Units, LOINC codes, confidence |
-| Caption | 11px | 500 | Mono | 0.03em | Parser versions, timestamps |
-| Overline | 10–11px | 600 | Mono | 0.04–0.06em | Section labels, uppercase tags |
+| Role | Size | Weight | Font | Tracking | Usage |
+|------|------|--------|------|----------|-------|
+| Hero | 36-48px | 700 | Space Mono | -0.04em | Main headline only |
+| H1 | 24px | 700 | Space Mono | -0.03em | Page titles |
+| H2 | 18px | 700 | Space Mono | -0.02em | Section headings |
+| H3 | 14px | 600 | DM Sans | 0 | Subsection headings |
+| Body | 14px | 400 | DM Sans | 0 | Descriptions, paragraphs |
+| Label | 10-11px | 700 | IBM Plex Mono | 0.06-0.1em | UPPERCASE section labels, column headers, tags |
+| Value | 16-32px | 700 | IBM Plex Mono | -0.02em | Metric values in cards/tables |
+| Caption | 10px | 400 | IBM Plex Mono | 0.04em | Timestamps, parser versions, small metadata |
 
-### Typography rules
+### Spatial rules
 
-- Apply font families via inline `style={{ fontFamily: 'var(--font-<role>)' }}` since Tailwind v4 font-family utilities reference CSS variables that aren't always available as standard utilities.
-- Use `tabular-nums` (via the `.tabular-nums` utility class) on all numeric data to maintain column alignment.
-- Italic serif (`fontStyle: 'italic'`) is reserved for emphasis words in hero headlines. Never use italic for body text or data.
-- Primary text color is `text-neutral-900` (#141414). Never use true black (#000000).
+- **Border radius**: 0px on badges, provenance tags, status indicators. 0-2px on cards and containers. No rounded corners anywhere — this is the most important visual difference from the old design.
+- **Shadows**: None. Zero box-shadow anywhere. Use 1px borders instead.
+- **Borders**: 1px solid neutral-200 for standard borders. 2px solid neutral-900 for heavy dividers (table headers, section separators, hero bottom border).
+- **Card spacing**: Metric cards and grid items should have 0 gap between them (shared borders, not floating cards with gaps). This creates a unified instrument panel feel.
+- **Padding**: 16-20px inside cards. 20-24px inside table rows. 32px page margins.
+- **Section spacing**: 48-64px between major sections.
 
----
+### Component patterns
 
-## Color system
+**Labels**: Uppercase, IBM Plex Mono, 10px, weight 700, letter-spacing 0.1em, color neutral-400 (or blue-500 for emphasis). Used pervasively for section headers, column headers, metadata prefixes.
 
-### Primary — Ultramarine Blue (`accent-*`)
+**Badges/Status indicators**: Square (0 border radius), 1px border in status color, transparent background, uppercase IBM Plex Mono text, with a small square (5x5px) dot in the status color. Not rounded pills.
 
-The trust anchor. Used for interactive elements, active states, primary actions, links, AI identity, and chart accents. **Never used for health status indicators.**
+**Provenance tags**: Rectangular, 1px border neutral-200, contain a bold 3-letter tag prefix in blue-500 (SRC, PSR, CNF, COD, STS, IMP, RNG, LAB, FLT) followed by the label text in neutral-600. IBM Plex Mono 10px.
 
-| Token | Hex | Use |
-|---|---|---|
-| `accent-50` | #EEF1FF | Hover backgrounds, focus rings |
-| `accent-100` | #D6DCFF | Focus ring outer, selection bg |
-| `accent-200` | #B0BAFF | Badge borders, link hovers |
-| `accent-500` | #3162FF | Primary actions, AI avatar, links, ring color |
-| `accent-600` | #2750D9 | Emphasis text, "Learn more" links, buttons |
-| `accent-700` | #1D3DB3 | Gradient end, strong emphasis |
+**Navigation**: Left-border accent pattern (2px blue-500 left border for active state), not background-fill pills. Monospace labels with numbered tags (01, 02, 03...).
 
-Logo uses a gradient: `linear-gradient(135deg, #3162FF, #1D3DB3)`.
-
-### Secondary — Lavender (`secondary-*`)
-
-Soft surfaces for elevation and provenance metadata. Creates visual depth without competing with blue.
-
-| Token | Hex | Use |
-|---|---|---|
-| `secondary-50` | #F5F5FA | Provenance pill backgrounds, feature icon backgrounds |
-| `secondary-100` | #EBEBF5 | Card section backgrounds |
-| `secondary-200` | #D6D6ED | Provenance pill borders |
-
-### Neutral
-
-Text hierarchy, borders, and structural chrome.
-
-| Token | Hex | Use |
-|---|---|---|
-| `neutral-0` | #FFFFFF | Card backgrounds, input backgrounds |
-| `neutral-50` | #FAFAFA | Default body background (dashboard) |
-| `neutral-100` | #F2F2F2 | Table header backgrounds, muted surfaces |
-| `neutral-200` | #E5E5E5 | Borders, dividers |
-| `neutral-400` | #999999 | Placeholder text, tertiary labels |
-| `neutral-500` | #737373 | Secondary body text, descriptions |
-| `neutral-600` | #555555 | Stronger secondary text |
-| `neutral-700` | #333333 | Strong labels |
-| `neutral-800` | #1F1F1F | Near-primary text |
-| `neutral-900` | #141414 | Primary text. This is our "black". |
-
-Marketing pages use `#FAF9F7` (warm cream) as the base background. Dashboard uses `neutral-50`.
-
-### Health semantic colors
-
-**These colors are EXCLUSIVELY for health data status indicators.** They never appear in navigation, brand elements, buttons, or general UI chrome.
-
-| Status | Foreground | Background | Border | Use |
-|---|---|---|---|---|
-| **Normal** | `#16A34A` | `#F0FDF4` | `#BBF7D0` | Within reference range |
-| **Warning** | `#D97706` | `#FFFBEB` | `#FDE68A` | Approaching threshold, borderline |
-| **Critical** | `#DC2626` | `#FEF2F2` | `#FECACA` | Outside reference range |
-| **Info** | `#3162FF` | `#EEF1FF` | `#D6DCFF` | New data, AI-generated insights |
-
-Access via CSS variables: `--color-health-normal`, `--color-health-normal-bg`, `--color-health-normal-border`, etc.
-
-### Color rules
-
-**Do:**
-- Use `accent-*` for interactive elements, links, and navigation active states.
-- Use health semantic colors only on data status indicators (badges, value coloring, trend lines).
-- Use `neutral-*` for all text hierarchy and structural borders.
-- Use `secondary-*` for subtle surface elevation (provenance pills, feature backgrounds).
-
-**Don't:**
-- Never use red, amber, or green in brand elements, navigation, or buttons.
-- Never use blue (`accent-*`) for health status — it's reserved for brand/interactive.
-- Never use true black (#000) for text — use `neutral-900` (#141414).
-- Never mix semantic health colors and brand colors in the same visual context.
+**Buttons**: Primary = blue-500 background, white text, square corners, DM Sans 14px weight 600. Secondary = transparent with 1px neutral-900 border, neutral-900 text. No border radius on any button.
 
 ---
 
-## Spacing and layout
+## Page structure and content
 
-### Content width
+### Navigation bar
 
-- Maximum content width: `max-w-[1120px]` (1120px) for dashboard and marketing pages.
-- Horizontal padding: `px-6` at all breakpoints.
-- Dashboard content container: `max-w-[1400px] mx-auto px-3 py-6 md:px-6 md:py-8`.
-
-### Section spacing
-
-- Marketing page sections: `py-20` (80px vertical padding).
-- Dashboard page top margin: `mb-7` between page header and content.
-- Card grid gaps: `gap-3` to `gap-4` (12–16px).
-- Feature section grid: `gap-10 md:gap-16` between text and visual.
-
-### Navigation
-
-- Top nav height: `3.5rem` (56px), stored as `--top-nav-height`.
-- Full-height pages (like AI chat) use `h-[calc(100vh-var(--top-nav-height))]`.
-
----
-
-## Component patterns
-
-### Buttons
-
-Buttons use CVA variants. The `default` variant (dark) is the primary CTA.
-
-| Variant | Use | Appearance |
-|---|---|---|
-| `default` | Primary actions, CTAs | Dark (`neutral-900`) background, white text |
-| `primary` | Brand-colored actions | Blue (`accent-600`) background, white text |
-| `outline` | Secondary actions | White background, neutral border |
-| `ghost` | Tertiary actions, inline links | Transparent, shows on hover |
-| `destructive` | Dangerous actions | Red background |
-
-Marketing CTAs use the dark `default` variant, not blue. Blue is reserved for emphasis text and "Learn more →" links.
-
-All buttons have `active:scale-[0.98]` micro-interaction and `focus-visible:ring-2 focus-visible:ring-accent-500`.
-
-### Cards
-
-Two card patterns:
-
-**Standard card:** `rounded-xl border border-neutral-200 bg-white p-5`
-
-**Elevated card with hover:** Uses the `.card-elevated` utility — `rounded-2xl`, `shadow-card`, hover transitions to `border-accent-300` with blue glow.
-
-### Status badges (health data only)
-
-The `StatusBadge` component renders a pill with a colored dot indicator:
 ```
-<StatusBadge status="normal" label="Normal" />
-<StatusBadge status="warning" label="Borderline" />
-<StatusBadge status="critical" label="High" />
-<StatusBadge status="info" label="New" />
-<StatusBadge status="neutral" label="Discontinued" />
+[Logo mark (blue square 28x28 with icon)] OpenVitals    Features  Docs  Pricing  Open Source          Sign in  [Get started]
 ```
 
-Structure: `rounded-full border px-2.5 py-[3px] text-xs font-medium` with a `1.5x1.5` dot circle. Font is `var(--font-body)`.
-
-### Provenance pills
-
-Small inline metadata indicators tracing data back to its source. Uses `secondary-*` palette:
-```
-<ProvenancePill label="Quest Diagnostics" icon="◎" />
-```
-Structure: `rounded-md border-secondary-200 bg-secondary-50 px-2.5 py-1 text-[11px]` with `var(--font-mono)`.
-
-### Metric cards
-
-Dashboard summary widgets showing a value with sparkline trend:
-- Title: `text-[13px] var(--font-body) text-neutral-500`
-- Value: `text-[32px] var(--font-display) font-medium tracking-[-0.03em]` — color determined by health status
-- Delta: `text-xs var(--font-mono)` with directional arrow (↑/↓/→)
-- Sparkline: inline SVG, color matches health status
-
-### Lab result rows
-
-Grid layout: `grid-cols-[1.6fr_0.9fr_1.2fr_0.8fr_1fr]`
-- Metric name: `var(--font-body)`, 14px, font-medium
-- Value: `var(--font-mono)`, 16px, font-semibold, health-colored
-- Reference range: `var(--font-mono)`, 12px, neutral-400
-- Status: `StatusBadge` component
-- Trend: `MiniSparkline` SVG
-
-Table header: `bg-neutral-50`, uppercase mono labels at `11px` with `tracking-[0.04em]`.
-
----
-
-## Animations
-
-### Available utilities
-
-| Class | Effect |
-|---|---|
-| `.animate-fade-in` | 0.3s opacity fade |
-| `.animate-fade-in-up` | 0.4s opacity + translateY(8px) |
-| `.animate-scale-in` | 0.3s opacity + scale(0.96) |
-| `.stagger-children` | Auto-stagger children with 40ms delays (up to 6 children) |
-| `.skeleton` | Shimmer loading effect |
-
-### Micro-interactions
-
-- Buttons: `active:scale-[0.98]` on press.
-- Cards: `transition: border-color 0.15s ease, box-shadow 0.15s ease` on hover.
-- Nav links: `transition-colors` on hover.
-- Focus rings: `focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2`.
-
-### Loading states
-
-Skeleton placeholders use the `.skeleton` class (shimmer gradient). Streaming AI content shows skeleton rows that match the expected layout dimensions.
-
----
-
-## Marketing page patterns
-
-### Overall aesthetic
-
-Warm editorial tone — like a medical journal crossed with a premium product page. Background is warm cream (`#FAF9F7`), not pure white. Alternating sections use `#F5F4F1` for depth. Generous whitespace. Restrained color — blue appears only in emphasis text and "Learn more" links.
+- Logo: 28x28 square (not rounded) blue-500 background with a simple white icon inside. "OpenVitals" in Space Mono 16px bold.
+- Nav links: DM Sans 14px, neutral-600, no underlines
+- "Sign in": DM Sans 14px, neutral-600
+- "Get started": Primary button (blue-500 bg, white text, square corners)
+- Bottom border: 2px solid neutral-900
 
 ### Hero section
 
-- **Left-aligned** text, not centered.
-- Display font headline with one italic blue emphasis word.
-- Two inline CTAs: dark button + ghost text link.
-- Full-width product mockup below (live UI components over a placeholder landscape image background).
+Two-line headline structure:
 
-### Feature sections
+Line 1 (neutral-900, Space Mono 40-48px bold): `Understand your health data`
+Line 2 (blue-500, Space Mono 40-48px bold italic): `from any lab, provider, or format.`
 
-- Alternate left-right: text on one side, visual on the other.
-- Grid: `md:grid-cols-[1fr_1.3fr]` or `md:grid-cols-[1.3fr_1fr]`.
-- Heading: `24px` display font, `leading-[1.25]`.
-- Description: `14px` body font, `leading-[1.7]`, `text-neutral-500`.
-- Link: `text-[13px] text-accent-600` with `→` suffix.
-- Visuals: live UI components floating over warm gradient backgrounds with subtle shadows, or placeholder images.
+Below the headline, add a single line of supporting text in DM Sans 16px neutral-500:
+`Upload lab PDFs, wearable exports, or any health document. OpenVitals parses, normalizes, and tracks everything — for free.`
 
-### Testimonials
+CTAs (with proper gap between them):
+- Primary: "Start tracking for free" — blue-500 bg, white text, square
+- Secondary: "Star us on GitHub →" — transparent, 1px neutral-900 border, neutral-900 text
 
-- Centered display heading.
-- 3-column grid of quote cards.
-- Quote text: `13px` body font, `leading-[1.65]`.
-- Attribution: initials avatar (rounded-full, `bg-neutral-100`) + name + role.
+Below the CTAs, render the dashboard preview (the mock screenshot showing metric cards and the lab results table). This should be an actual component rendering mock data, NOT an image. It should have a 1px neutral-200 border and sit on the neutral-50 background. Show the mock with:
+- 4 metric cards in a grid (LDL Cholesterol 98, HbA1c 5.9, Ferritin 14, Vitamin D 22) with appropriate status colors and sparkline trends
+- A lab results table below with 5 rows (LDL, HDL, Triglycerides, HbA1c, Ferritin) showing metric, value, reference, status badge, and sparkline trend columns
+- Column headers: uppercase IBM Plex Mono 10px labels with 2px bottom border
+- Status badges: square, bordered, uppercase (NORMAL, BORDER, LOW)
 
-### Trust bar
+### Section 2: How it works (three-step flow)
 
-- Centered subtext: `text-[12px] text-neutral-400`.
-- Provider names as text with `opacity-30` (placeholder for actual logos).
+This section is new and critical — it demystifies the product in 3 steps.
+
+Section label: "HOW IT WORKS" (blue-500, uppercase IBM Plex Mono)
+
+Three columns, zero gap between them (shared borders), each with:
+- A step number in the top-left (Space Mono, 48px, neutral-200 — decorative large number)
+- A heading (Space Mono 18px bold)
+- 2-3 lines of description (DM Sans 14px neutral-600)
+
+| Step | Heading | Description |
+|------|---------|-------------|
+| 01 | Upload anything | Drop a lab report PDF, CSV export, or connect a wearable. We accept results from Quest, LabCorp, hospital systems, and dozens more. |
+| 02 | Automatic parsing | AI classifies your document, extracts every value, normalizes units, and maps to standard medical codes — with confidence scores on every extraction. |
+| 03 | Track and understand | See trends over time, share specific slices with your doctor, and ask AI questions grounded in your actual records. |
+
+### Section 3: Lab report ingestion
+
+Section label: "INGESTION" (blue-500)
+Heading: `Drop your lab report. See what it means in seconds.` (Space Mono 24px bold)
+Description: `The pipeline classifies, extracts, normalizes, and maps to standard codes. You review anything that's uncertain.` (DM Sans 14px neutral-500)
+
+Right side or below: render the import jobs table component showing 3 rows:
+- quest_labs_mar2026.pdf | Lab report | DONE badge | 0.96 | 18 records
+- physical_notes.pdf | Encounter note | PARSING badge | 0.84 | —
+- dental_summary.pdf | Dental record | REVIEW badge | 0.62 | 7 records
+
+The table should use the same sharp styling: 2px black header border, uppercase mono column labels, 1px row borders.
+
+### Section 4: Provenance
+
+Section label: "PROVENANCE" (blue-500)
+Heading: `Never wonder where a number came from.` (Space Mono 24px bold)
+Description: `Click any observation and see the full chain: source PDF, parser version, LOINC code, confidence score. No black boxes.` (DM Sans 14px neutral-500)
+
+Display a row of provenance tags showing the chain:
+`[SRC] Quest Diagnostics PDF → [PSR] lab-pdf-parser v2.1 → [CNF] 0.94 → [COD] LOINC 13457-7 → [STS] User confirmed`
+
+These should be the rectangular provenance tag components with 3-letter blue prefixes, connected by → arrows or a horizontal line.
+
+### Section 5: AI chat
+
+Section label: "AI" (blue-500)
+Heading: `AI that only speaks from your records.` (Space Mono 24px bold)
+Description: `Ask questions about your health data and get answers grounded in your actual observations. Every response cites the data it used.` (DM Sans 14px neutral-500)
+
+Render a mock chat interface:
+- User message: "How have my lipid panel results changed over the last year?" (right-aligned, blue-500 border, blue-500 background, white text)
+- AI response: "Your lipid panel shows meaningful improvement. LDL dropped from 142 to 98 mg/dL — now within optimal range. However, triglycerides trended up to 162 mg/dL." (left-aligned, 1px neutral-200 border, white background)
+- Below the AI response: provenance tags `[SRC] 6 lipid observations  [RNG] Mar 2025 – Mar 2026  [LAB] Quest + LabCorp`
+- The AI response should have a "OPENVITALS AI" label above it in blue-500 uppercase mono
+
+### Section 6: Sharing
+
+Section label: "SHARING" (blue-500)
+Heading: `Share exactly what your doctor needs.` (Space Mono 24px bold)
+Description: `Create scoped shares by category, time range, and access level. Your cardiologist sees lipids and vitals. Your nutritionist sees diet-related labs. Nobody sees what they shouldn't.` (DM Sans 14px neutral-500)
+
+Render two share policy cards side by side (zero gap, shared border):
+1. Dr. Martinez — dr.martinez@clinic.com — categories: LABS, VITALS, MEDS, CONDITIONS — level: FULL — exp: 30 DAYS — last: 2H AGO
+2. Nutrition consult — Share link (copied) — categories: LABS·LIPIDS, BODY COMP, NUTRITION — level: TRENDS — exp: 7 DAYS — last: NOT YET
+
+Category tags: square, 1px blue-200 border, blue-700 text, IBM Plex Mono 10px.
+
+### Section 7: Medication tracking
+
+Section label: "MEDICATIONS" (blue-500)
+Heading: `See how your medications connect to your labs.` (Space Mono 24px bold)
+Description: `Active medications, supplements, dosage, frequency, and daily adherence — all linked to your health timeline and lab results.` (DM Sans 14px neutral-500)
+
+Two medication cards side by side (zero gap):
+1. Atorvastatin — 20mg · Once daily — Cholesterol management — ACTIVE badge — Started Jan 2025
+2. Vitamin D3 — 5000 IU · Once daily — Vitamin D deficiency — ACTIVE badge — Started Mar 2026
+
+### Section 8: Open source CTA
+
+Section label: "OPEN SOURCE" (blue-500)
+Heading: `Free to use. Free to self-host. Free to fork.` (Space Mono 24px bold)
+Description: `OpenVitals is open-source health data infrastructure. Contribute parsers, build custom views, or run the entire platform on your own machine.` (DM Sans 14px neutral-500)
+
+Below, a three-column grid (zero gap) with:
+
+| Card | Heading | Description |
+|------|---------|-------------|
+| Your data stays yours | Export anytime in standard formats. Self-host if you want. No lock-in, ever. |
+| Community-driven | Plugin ecosystem for custom parsers, views, and analyzers. Public roadmap, transparent development. |
+| Built by engineers | TypeScript end-to-end, Postgres, Drizzle, tRPC. Read every line of code on GitHub. |
+
+Each card: IBM Plex Mono uppercase label for heading, DM Sans body text, 1px border, shared borders between cards.
+
+### Section 9: Final CTA
+
+Full-width section with 2px top border in neutral-900.
+
+Heading: `Start tracking your health data.` (Space Mono 24px bold, centered)
+Subtext: `No credit card. No lock-in. Upload your first lab report in under a minute.` (DM Sans 14px neutral-500, centered)
+
+Two CTAs centered:
+- "Create your account" — primary button
+- "View on GitHub →" — secondary button
+
+### Footer
+
+Simple, structured footer with 2px top border in neutral-900.
+
+Left column:
+- OpenVitals logo + wordmark
+- `Health data infrastructure for everyone.` (IBM Plex Mono 11px neutral-400)
+
+Column groups (IBM Plex Mono 10px uppercase labels for headers, DM Sans 13px for links):
+- Product: Integrations, Labs, Medications, AI Chat, Sharing, Uploads
+- Resources: Documentation, Plugin SDK, API Reference, Changelog
+- Company: About, Open Source, GitHub, Blog
+- Legal: Privacy, Terms, Security
+
+Bottom row: `© 2026 OpenVitals` and `v0.1.0` in IBM Plex Mono 10px neutral-400.
 
 ---
 
-## Dashboard page patterns
+## Critical implementation notes
 
-### Page headers
+1. **No border-radius anywhere.** This is the most important visual rule. Check every component — buttons, cards, badges, inputs, the dashboard preview — and ensure border-radius is 0 or at most 2px. If you see rounded corners, remove them.
 
-Every dashboard page starts with:
-```tsx
-<h1 className="text-[26px] font-medium tracking-[-0.025em] text-neutral-900"
-    style={{ fontFamily: 'var(--font-display)' }}>
-  Page Title
-</h1>
-<p className="mt-1 text-sm text-neutral-500"
-   style={{ fontFamily: 'var(--font-body)' }}>
-  Description text.
-</p>
-```
+2. **No box-shadows.** Replace all shadows with 1px borders. Elevation is communicated through border weight (1px = normal, 2px = emphasis) not through depth.
 
-### Data tables
+3. **Grid items share borders.** When cards or columns are side by side, they should have 0 gap and share borders (use border-right: none on all but the last item, or use a CSS grid with collapse-style borders). This creates the instrument panel / data table feel.
 
-- Container: `rounded-xl border border-neutral-200 bg-white overflow-hidden`.
-- Header row: `bg-neutral-50`, mono uppercase labels.
-- Data rows: `border-b border-neutral-100`, `hover:bg-neutral-50`.
-- Values: mono font, health-status-colored where applicable.
-- Actions: Right-aligned sparklines or action buttons.
+4. **Uppercase monospace labels are pervasive.** Every section header, every column header, every metadata label uses the same pattern: IBM Plex Mono, 10px, weight 700, letter-spacing 0.06-0.1em, uppercase. Color is either neutral-400 (default) or blue-500 (emphasis). This creates strong visual rhythm across the entire page.
 
-### Section labels within pages
+5. **The dashboard preview must be a real component, not an image.** Render actual React components with mock data. This lets us reuse the same components in the actual dashboard later, and it looks sharper than a screenshot.
 
-Uppercase mono overline for section grouping:
-```tsx
-<h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-neutral-400"
-    style={{ fontFamily: 'var(--font-mono)' }}>
-  Key Metrics
-</h3>
-```
+6. **Sparkline mini-charts** in metric cards and table rows: simple SVG polylines, 100x24px, 1.5px stroke, square end-cap dot (4x4px rect, not circle) at the last data point. Color matches the status (green for normal, amber for warning, red for critical, blue for info/default).
 
----
+7. **Responsive behavior**: The page should work on mobile. On screens < 768px, the 4-column metric card grid becomes 2x2, the lab table horizontally scrolls, and side-by-side cards stack vertically. The hero headline can drop to 28-32px on mobile.
 
-## AI chat patterns
+8. **Page background**: neutral-50 (#FAFAFA). Card/container backgrounds: neutral-0 (#FFFFFF) with 1px neutral-200 borders.
 
-### Message bubbles
+9. **Links in body text**: blue-500 color, no underline by default, underline on hover. Links in navigation: neutral-600, no underline, hover neutral-900.
 
-- **User messages**: Right-aligned, `bg-accent-500` text-white, border-radius `16px 16px 4px 16px`.
-- **AI messages**: Left-aligned, white with `border-neutral-200`, border-radius `4px 16px 16px 16px`.
-- AI avatar: Blue gradient circle with logo SVG.
-- AI label: `"OpenVitals AI"` in uppercase mono, `text-accent-500`.
+10. **Remove all testimonials.** The old page had fake testimonials from "Sarah M." etc. Do not include any testimonials. They have been replaced by the "Open Source" section.
 
-### Provenance on AI responses
+11. **Remove the "Stay on the frontier" section.** It has been replaced by the "Open Source CTA" section.
 
-Source citations appear below AI messages as a row of `ProvenancePill` components.
+12. **Remove the changelog sidebar.** It added clutter without clear value on the landing page.
 
-### Artifact cards
-
-Clickable cards within AI messages that open the insight panel:
-`rounded-xl border-accent-200 bg-accent-50 p-3.5` with accent-colored icon.
-
-### Chat input
-
-Auto-growing textarea in a `rounded-2xl` container with:
-- Focus state: `border-accent-300 shadow-md ring-2 ring-accent-100`.
-- Send button: blue gradient when active, muted when empty.
-- Disclaimer: `text-[10px] var(--font-mono) text-neutral-400` centered below.
-
----
-
-## Shadows
-
-| Token | Value | Use |
-|---|---|---|
-| `shadow-xs` | `0 1px 2px rgba(0,0,0,0.03)` | Subtle lift |
-| `shadow-sm` | `0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)` | Buttons, pill tabs |
-| `shadow-card` | `0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.02)` | Card default |
-| `shadow-card-hover` | `0 0 0 1px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05)` | Card hover |
-
-Marketing page mockups use heavier shadows: `0 4px 24px rgba(0,0,0,0.06), 0 12px 48px rgba(0,0,0,0.04)` for the floating product UI effect.
-
----
-
-## Border radius
-
-| Token | Value | Use |
-|---|---|---|
-| `rounded-md` (6px) | Buttons, pills, inputs |
-| `rounded-lg` (8px) | Small cards, form elements |
-| `rounded-xl` (10px) | Standard cards, table containers |
-| `rounded-2xl` (12px) | Elevated cards, chat input |
-| `rounded-full` | Status badges, avatars |
-
----
-
-## File organization
-
-```
-components/
-  ui/         # Radix primitives (button, dropdown-menu, popover, etc.)
-  health/     # Health-specific components (StatusBadge, MetricCard, LabResultRow, etc.)
-  avatar.tsx  # Shared avatar with initials fallback
-  button/     # Extended Button + IconButton with text/icon/loading props
-features/
-  layout/     # TopNav, PrimaryNav, Logo, etc.
-  ai/         # Chat page components (ChatInput, MessageBlock, InsightPanel, etc.)
-  marketing/  # Landing page sections
-```
-
-Components in `ui/` are generic primitives. Components in `health/` encode the health-specific design language (status colors, provenance, sparklines). Feature components in `features/` compose these into full page experiences.
+13. **Animations**: Minimal. A subtle fade-up (opacity 0→1, translateY 8px→0, 300ms ease) on each section as it enters the viewport using Intersection Observer. No spring physics, no bounce, no parallax. The brutalist feel comes from stillness and precision, not motion.

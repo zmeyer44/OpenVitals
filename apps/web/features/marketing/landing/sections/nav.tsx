@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { LogoWordmark } from "@/assets/app/images/logo";
+import { Logo, LogoWordmark } from "@/assets/app/images/logo";
 import { MenuIcon } from "@/assets/icons/menu";
 import { XIcon } from "@/assets/icons/x";
 
@@ -17,7 +17,6 @@ const navLinks = [
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
@@ -33,53 +32,47 @@ export function Nav() {
 
   return (
     <>
-      <header
-        className="sticky top-0 z-50 border-b border-neutral-200/50"
-        style={{
-          backgroundColor: "rgba(250,249,247,0.88)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-        }}
-      >
-        <div className="mx-auto flex max-w-280 items-center justify-between px-6 h-12">
-          {/* Left: logo + desktop nav */}
-          <div className="flex items-center gap-6">
-            <Link href="/" className="text-neutral-900">
-              <LogoWordmark logoProps={{ className: "animate-spin-yoyo" }} />
-            </Link>
-            <nav className="hidden md:flex items-center gap-5">
-              {navLinks.map((l) =>
-                l.href ? (
-                  <Link
-                    key={l.label}
-                    href={l.href}
-                    className="text-[13px] text-neutral-500 hover:text-neutral-800 cursor-pointer transition-colors font-body"
-                  >
-                    {l.label}
-                  </Link>
-                ) : (
-                  <span
-                    key={l.label}
-                    className="text-[13px] text-neutral-500 hover:text-neutral-800 cursor-pointer transition-colors font-body"
-                  >
-                    {l.label}
-                  </span>
-                ),
-              )}
-            </nav>
-          </div>
+      <header className="sticky top-0 z-50 bg-neutral-50">
+        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 md:px-10 h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <LogoWordmark />
+            
+          </Link>
 
-          {/* Right: auth + hamburger */}
-          <div className="flex items-center gap-3">
+          {/* Center nav links */}
+          <nav className="hidden md:flex items-center gap-7">
+            {navLinks.map((l) =>
+              l.href ? (
+                <Link
+                  key={l.label}
+                  href={l.href}
+                  className="font-mono text-[12px] font-medium uppercase tracking-[0.06em] text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <span
+                  key={l.label}
+                  className="font-mono text-[12px] font-medium uppercase tracking-[0.06em] text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors"
+                >
+                  {l.label}
+                </span>
+              ),
+            )}
+          </nav>
+
+          {/* Right: buttons + hamburger */}
+          <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/login"
-              className="hidden sm:block text-[13px] text-neutral-600 hover:text-neutral-900 transition-colors font-body"
+              className="hidden sm:block bg-neutral-900 px-4 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white hover:bg-neutral-800 transition-colors"
             >
-              Sign in
+              Log in
             </Link>
             <Link
               href="/register"
-              className="rounded-md bg-neutral-900 px-3 py-1.5 text-[12px] font-medium text-white hover:bg-neutral-800 transition-colors font-body"
+              className="hidden sm:block border border-neutral-900 px-4 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors"
             >
               Get started
             </Link>
@@ -97,10 +90,10 @@ export function Nav() {
         </div>
       </header>
 
-      {/* ── Mobile fullscreen menu ── */}
+      {/* Mobile fullscreen menu */}
       <div
         className={cn(
-          "fixed inset-0 z-100 bg-background transition-opacity duration-200 md:hidden",
+          "fixed inset-0 z-100 bg-neutral-50 transition-opacity duration-200 md:hidden",
           mobileOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none",
@@ -108,8 +101,7 @@ export function Nav() {
         role="navigation"
         aria-hidden={!mobileOpen}
       >
-        {/* Close button — top-right, matching header height */}
-        <div className="flex h-12 items-center justify-end px-6">
+        <div className="flex h-16 items-center justify-end px-6">
           <button
             type="button"
             className="relative -mr-1 inline-flex size-8 cursor-pointer items-center justify-center"
@@ -120,8 +112,7 @@ export function Nav() {
           </button>
         </div>
 
-        {/* Nav links — large, staggered */}
-        <ul className="mt-6 flex flex-col px-6">
+        <ul className="mt-4 flex flex-col px-6">
           {navLinks.map((l, i) => (
             <li
               key={l.label}
@@ -135,14 +126,14 @@ export function Nav() {
               {l.href ? (
                 <Link
                   href={l.href}
-                  className="block border-b border-neutral-200/60 py-4 text-[24px] font-medium tracking-[-0.01em] text-neutral-900 transition-colors hover:text-neutral-500 font-display"
+                  className="block border-b border-neutral-200 py-4 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-neutral-900 hover:text-accent-500 transition-colors"
                   onClick={close}
                 >
                   {l.label}
                 </Link>
               ) : (
                 <span
-                  className="block cursor-pointer border-b border-neutral-200/60 py-4 text-[24px] font-medium tracking-[-0.01em] text-neutral-900 transition-colors hover:text-neutral-500 font-display"
+                  className="block cursor-pointer border-b border-neutral-200 py-4 font-mono text-[14px] font-bold uppercase tracking-[0.06em] text-neutral-900 hover:text-accent-500 transition-colors"
                   onClick={close}
                 >
                   {l.label}
@@ -152,9 +143,8 @@ export function Nav() {
           ))}
         </ul>
 
-        {/* Auth actions */}
         <div
-          className="mt-2 flex items-center gap-4 px-6 pt-6 transition-all duration-300"
+          className="mt-4 flex items-center gap-3 px-6 pt-4 transition-all duration-300"
           style={{
             opacity: mobileOpen ? 1 : 0,
             transform: mobileOpen ? "translateY(0)" : "translateY(8px)",
@@ -165,17 +155,17 @@ export function Nav() {
         >
           <Link
             href="/register"
-            className="rounded-md bg-neutral-900 px-5 py-2.5 text-[14px] font-medium text-white hover:bg-neutral-800 transition-colors font-body"
+            className="bg-neutral-900 px-5 py-2.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-white"
             onClick={close}
           >
             Get started
           </Link>
           <Link
             href="/login"
-            className="text-[14px] text-neutral-500 hover:text-neutral-900 transition-colors font-body"
+            className="font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-neutral-500 hover:text-neutral-900 transition-colors"
             onClick={close}
           >
-            Sign in
+            Log in
           </Link>
         </div>
       </div>
