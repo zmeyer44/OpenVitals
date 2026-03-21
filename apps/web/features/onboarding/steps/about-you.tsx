@@ -23,10 +23,10 @@ interface AboutYouStepProps {
 }
 
 const inputClass =
-  'w-full rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-[14px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all';
+  'w-full border border-neutral-200 bg-white px-3 py-2.5 text-[14px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all';
 const labelClass = 'block text-[13px] font-medium text-neutral-700 mb-1.5';
 const selectClass =
-  'w-full rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-[14px] text-neutral-900 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all appearance-none cursor-pointer';
+  'w-full border border-neutral-200 bg-white px-3 py-2.5 text-[14px] text-neutral-900 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all appearance-none cursor-pointer';
 
 export function AboutYouStep({ data, onChange, onNext, onBack, direction }: AboutYouStepProps) {
   const update = (field: keyof AboutYouData, value: string) => onChange({ ...data, [field]: value });
@@ -75,7 +75,7 @@ export function AboutYouStep({ data, onChange, onNext, onBack, direction }: Abou
                 key={s}
                 type="button"
                 onClick={() => update('sex', s.toLowerCase())}
-                className={`rounded-lg border px-3 py-2.5 text-[13px] font-medium transition-all cursor-pointer ${
+                className={`border px-3 py-2.5 text-[13px] font-medium transition-all cursor-pointer ${
                   data.sex === s.toLowerCase()
                     ? 'border-accent-500 bg-accent-50 text-accent-700'
                     : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
@@ -122,7 +122,7 @@ export function AboutYouStep({ data, onChange, onNext, onBack, direction }: Abou
                 key={bt}
                 type="button"
                 onClick={() => update('bloodType', data.bloodType === bt ? '' : bt)}
-                className={`rounded-lg border px-2 py-2 text-[12px] font-semibold transition-all cursor-pointer ${
+                className={`border px-2 py-2 text-[12px] font-semibold transition-all cursor-pointer ${
                   data.bloodType === bt
                     ? 'border-accent-500 bg-accent-50 text-accent-700'
                     : 'border-neutral-200 bg-white text-neutral-500 hover:border-neutral-300'

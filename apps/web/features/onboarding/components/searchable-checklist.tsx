@@ -57,7 +57,7 @@ export function SearchableChecklist({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="w-full rounded-lg border border-neutral-200 bg-white py-2 pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 font-body"
+          className="w-full border border-neutral-200 bg-white py-2 pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 font-body"
         />
       </div>
 
@@ -69,7 +69,7 @@ export function SearchableChecklist({
       )}
 
       {/* List */}
-      <div className="overflow-y-auto rounded-lg border border-neutral-200" style={{ maxHeight }}>
+      <div className="overflow-y-auto border border-neutral-200" style={{ maxHeight }}>
         {Object.entries(grouped).map(([category, categoryItems]) => (
           <div key={category}>
             <div className="sticky top-0 z-10 bg-neutral-50 px-3 py-1.5">
@@ -93,7 +93,7 @@ export function SearchableChecklist({
                 >
                   <div
                     className={cn(
-                      'flex size-4 shrink-0 items-center justify-center rounded border transition-colors',
+                      'flex size-4 shrink-0 items-center justify-center border transition-colors',
                       isSelected
                         ? 'border-accent-500 bg-accent-500'
                         : 'border-neutral-300 bg-white'

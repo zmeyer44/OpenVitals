@@ -1,3 +1,5 @@
+import { DashBadge } from "@/components/decorations/dot-badge";
+
 const tags = [
   { prefix: "SRC", label: "Quest Diagnostics PDF" },
   { prefix: "PSR", label: "lab-pdf-parser v2.1" },
@@ -14,12 +16,7 @@ export function Provenance() {
         <div className="grid grid-cols-1 md:grid-cols-3 border-b border-neutral-800 py-14 lg:py-20">
           {/* Col 1 — label + description */}
           <div className="pr-8 pb-8 md:pb-0">
-            <div className="flex items-center gap-2.5 mb-6">
-              <div className="size-[7px] rounded-full bg-accent-500" />
-              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-500">
-                Provenance
-              </span>
-            </div>
+            <DashBadge className="mb-6 text-neutral-300">Provenance</DashBadge>
             <p className="font-display text-[15px] text-neutral-400 leading-[1.6] max-w-[280px]">
               Every value in OpenVitals traces back to its source — with full
               transparency on how it was parsed, coded, and confirmed.

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { GITHUB_URL } from "@/constants/app";
+import { DashBadge } from "@/components/decorations/dot-badge";
 
 const cards = [
   {
@@ -25,20 +26,6 @@ export function OpenSource() {
       <div className="mx-auto max-w-[1280px] px-6 md:px-10">
         {/* ── Top: 3-column features ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 border-b border-neutral-800 py-14 lg:py-20">
-          {/* Col 1 — label + description */}
-          <div className="pr-8 pb-8 md:pb-0">
-            <div className="flex items-center gap-2.5 mb-6">
-              <div className="size-[7px] rounded-full bg-accent-500" />
-              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-500">
-                Open Source
-              </span>
-            </div>
-            <p className="font-display text-[15px] text-neutral-400 leading-[1.6] max-w-[280px]">
-              OpenVitals is open-source health data infrastructure — secure,
-              extensible, and ready to integrate with your existing tools.
-            </p>
-          </div>
-
           {/* Feature columns */}
           {cards.map((c, i) => (
             <div
@@ -56,9 +43,17 @@ export function OpenSource() {
                 {c.desc}
               </p>
               <a
-                href={c.heading === "Built by Engineers" ? GITHUB_URL : "/register"}
-                target={c.heading === "Built by Engineers" ? "_blank" : undefined}
-                rel={c.heading === "Built by Engineers" ? "noopener noreferrer" : undefined}
+                href={
+                  c.heading === "Built by Engineers" ? GITHUB_URL : "/register"
+                }
+                target={
+                  c.heading === "Built by Engineers" ? "_blank" : undefined
+                }
+                rel={
+                  c.heading === "Built by Engineers"
+                    ? "noopener noreferrer"
+                    : undefined
+                }
                 className="mt-4 inline-flex font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white hover:text-accent-400 transition-colors"
               >
                 {c.link}

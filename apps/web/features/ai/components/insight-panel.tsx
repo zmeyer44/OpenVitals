@@ -71,23 +71,23 @@ export function InsightPanel({ insight, onClose }: InsightPanelProps) {
       <div className="flex-1 overflow-y-auto">
         {isStreaming ? (
           <div className="space-y-4 p-6">
-            <div className="skeleton h-5 w-48 rounded" />
+            <div className="skeleton h-5 w-48" />
             <div className="grid grid-cols-2 gap-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="rounded-xl border border-neutral-200 p-4">
-                  <div className="skeleton mb-3 h-3 w-20 rounded" />
-                  <div className="skeleton mb-3 h-8 w-16 rounded" />
-                  <div className="skeleton h-6 w-full rounded" />
+                <div key={i} className="border border-neutral-200 p-4">
+                  <div className="skeleton mb-3 h-3 w-20" />
+                  <div className="skeleton mb-3 h-8 w-16" />
+                  <div className="skeleton h-6 w-full" />
                 </div>
               ))}
             </div>
-            <div className="skeleton mt-6 h-4 w-32 rounded" />
-            <div className="overflow-hidden rounded-xl border border-neutral-200">
+            <div className="skeleton mt-6 h-4 w-32" />
+            <div className="overflow-hidden border border-neutral-200">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="flex gap-4 border-b border-neutral-100 px-5 py-3.5">
-                  <div className="skeleton h-4 w-28 rounded" />
-                  <div className="skeleton h-4 w-16 rounded" />
-                  <div className="skeleton h-4 w-20 rounded" />
+                  <div className="skeleton h-4 w-28" />
+                  <div className="skeleton h-4 w-16" />
+                  <div className="skeleton h-4 w-20" />
                 </div>
               ))}
             </div>
@@ -112,7 +112,7 @@ export function InsightPanel({ insight, onClose }: InsightPanelProps) {
                 <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-neutral-400 font-mono">
                   Results
                 </h3>
-                <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+                <div className="overflow-hidden border border-neutral-200 bg-white">
                   <LabResultHeader />
                   {insight.data.labResults.map((r) => (
                     <LabResultRow key={r.metric} {...r} />
@@ -126,7 +126,7 @@ export function InsightPanel({ insight, onClose }: InsightPanelProps) {
                 <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-neutral-400 font-mono">
                   Analysis
                 </h3>
-                <div className="rounded-xl border border-neutral-200 bg-white p-5 text-[14px] leading-[1.7] text-neutral-700 font-body">
+                <div className="border border-neutral-200 bg-white p-5 text-[14px] leading-[1.7] text-neutral-700 font-body">
                   {insight.data.summary}
                 </div>
               </div>

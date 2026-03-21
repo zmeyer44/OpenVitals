@@ -34,7 +34,7 @@ export function MiniSparkline({ data, color, width = 120, height = 32 }: MiniSpa
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx={parseFloat(cx!)} cy={parseFloat(cy!)} r="3" fill={color} />
+      <rect x={parseFloat(cx!) - 3} y={parseFloat(cy!) - 3} width="6" height="6" fill={color} />
     </svg>
   );
 }

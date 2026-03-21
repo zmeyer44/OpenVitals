@@ -16,7 +16,6 @@ export default function WhatWeTrackPage() {
   );
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // Track active category via IntersectionObserver
   useEffect(() => {
     observerRef.current?.disconnect();
 
@@ -50,7 +49,6 @@ export default function WhatWeTrackPage() {
     }
   }, []);
 
-  // Compute visible categories based on search
   const filtered = filterBiomarkers(searchQuery);
   const byCategory = groupByCategory(filtered);
   const visibleCategories = CATEGORY_ORDER.filter((c) =>
@@ -58,13 +56,13 @@ export default function WhatWeTrackPage() {
   ) as string[];
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#FAF9F7" }}>
+    <div className="min-h-screen bg-neutral-50">
       <Nav />
       <Hero />
 
       {/* Main content */}
-      <section className="border-t border-neutral-200/50">
-        <div className="mx-auto max-w-[1120px] px-6 py-12">
+      <section className="border-t border-neutral-200">
+        <div className="mx-auto max-w-[1280px] px-6 md:px-10 py-12">
           {/* Mobile pill nav */}
           <div className="md:hidden">
             <CategoryNav

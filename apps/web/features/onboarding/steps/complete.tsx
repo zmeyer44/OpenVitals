@@ -82,7 +82,7 @@ export function CompleteStep({ completedSections, totalSections, onComplete }: C
         >
           <button
             onClick={onComplete}
-            className="block w-full rounded-md bg-neutral-900 px-8 py-2.5 text-[14px] font-medium text-white hover:bg-neutral-800 transition-all active:scale-[0.98] font-body cursor-pointer"
+            className="block w-full bg-neutral-900 px-8 py-2.5 text-[14px] font-medium text-white hover:bg-neutral-800 transition-all active:scale-[0.98] font-body cursor-pointer"
           >
             Go to your dashboard
           </button>

@@ -11,6 +11,7 @@ import { FinalCta } from "./sections/final-cta";
 import { Footer } from "./sections/footer";
 import { SectionReveal } from "./components/section-reveal";
 import { TrustBar } from "./sections/trust-bar";
+import { WhyUs } from "./sections/why-us";
 
 export default function LandingPage() {
   return (
@@ -36,11 +37,13 @@ export default function LandingPage() {
       <SectionReveal>
         <Medications />
       </SectionReveal>
-      <SectionReveal>
-        <OpenSource />
-      </SectionReveal>
-      <FinalCta />
-      <Footer />
+      <div className="bg-accent-50">
+        <SectionReveal>
+          <WhyUs />
+        </SectionReveal>
+        <FinalCta />
+        <Footer />
+      </div>
     </div>
   );
 }

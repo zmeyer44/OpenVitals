@@ -53,13 +53,13 @@ export function MetricSummaryCard({
     <Link
       href={`/labs/${metricCode}`}
       className={cn(
-        "flex flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-5 min-w-0",
-        "hover:border-accent-200 hover:shadow-sm transition-all cursor-pointer",
+        "flex flex-col gap-3 border border-neutral-200 bg-white p-5 min-w-0",
+        "hover:border-accent-200 transition-all cursor-pointer",
       )}
     >
       {/* Header: name + badge */}
       <div className="flex items-start justify-between gap-2">
-        <span className="text-[13px] font-medium tracking-[0.02em] text-neutral-500 font-body truncate">
+        <span className="text-[13px] font-medium tracking-[0.02em] text-neutral-500 font-display truncate">
           {name}
         </span>
         <StatusBadge status={status} label={statusLabel} className="shrink-0" />

@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { DashBadge } from "@/components/decorations/dot-badge";
 
 const steps = [
   {
@@ -21,20 +22,19 @@ const steps = [
 export function HowItWorks() {
   return (
     <section className="mx-auto max-w-[1120px] px-6 md:px-8 py-12 md:py-16">
-      <div className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-accent-500 mb-8">
-        HOW IT WORKS
-      </div>
+      <DashBadge>HOW IT WORKS</DashBadge>
+      <div className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-accent-500 mb-8"></div>
       <div className="grid grid-cols-1 md:grid-cols-3 border border-neutral-200 bg-white">
         {steps.map((s, i) => (
           <div
             key={s.num}
             className={cn(
-              "p-5 md:p-6",
+              "group p-5 md:p-6 hover:bg-secondary-200/40 transition-all",
               i < steps.length - 1 &&
                 "border-b md:border-b-0 md:border-r border-neutral-200",
             )}
           >
-            <div className="font-display text-[48px] font-bold text-neutral-200 leading-none">
+            <div className="font-display text-[48px] font-bold text-neutral-200 group-hover:text-accent-500 transition-all leading-none">
               {s.num}
             </div>
             <h3 className="mt-3 font-display text-[18px] font-bold tracking-[-0.02em] text-neutral-900">

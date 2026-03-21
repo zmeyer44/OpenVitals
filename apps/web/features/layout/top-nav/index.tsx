@@ -46,7 +46,7 @@ export function TopNav() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[13px] font-medium transition-colors",
+                  "hidden md:flex items-center gap-1.5 px-2.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.04em] transition-colors",
                   pathname.startsWith(item.href)
                     ? "text-accent-700 bg-accent-50"
                     : "text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50",
@@ -65,7 +65,7 @@ export function TopNav() {
             <div className="ml-2 flex items-center gap-2 pl-3 border-l border-neutral-200">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent-500">
+                  <button className="cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-500">
                     <Avatar
                       className="size-8 rounded-full bg-neutral-200"
                       name={session?.user?.name ?? ""}

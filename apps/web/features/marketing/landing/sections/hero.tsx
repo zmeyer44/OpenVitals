@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils";
 import { GITHUB_URL } from "@/constants/app";
 import { Logo } from "@/assets/app/images/logo";
 import { Spark } from "../components/spark";
-
+import { CornerCrossBadge } from "@/components/decorations/corner-cross";
+import { Button } from "@/components/button";
+import { DashBadge } from "@/components/decorations/dot-badge";
 /* ------------------------------------------------------------------ */
 /*  Floating data elements for the right side of the hero             */
 /* ------------------------------------------------------------------ */
@@ -26,16 +28,13 @@ function WindowChrome() {
 
 function FloatingElements() {
   return (
-    <div className="relative h-full w-full" aria-hidden="true">
-      {/* Central watermark logo */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.04]">
-        <Logo className="size-32" />
-      </div>
-
+    <div className="relative h-full w-full overflow-x-clip" aria-hidden="true">
       {/* Card 1 — Metric summary */}
       <div
         className="absolute top-6 left-0 w-[210px] bg-white border border-neutral-200"
-        style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04)" }}
+        style={{
+          boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04)",
+        }}
       >
         <WindowChrome />
         <div className="p-3.5">
@@ -52,7 +51,12 @@ function FloatingElements() {
             <span className="font-mono text-[9px] font-bold text-[#16A34A]">
               ↓ 14
             </span>
-            <Spark data={[142, 130, 118, 105, 98]} color="#16A34A" w={56} h={16} />
+            <Spark
+              data={[142, 130, 118, 105, 98]}
+              color="#16A34A"
+              w={56}
+              h={16}
+            />
           </div>
         </div>
       </div>
@@ -60,7 +64,9 @@ function FloatingElements() {
       {/* Card 2 — Mini lab table */}
       <div
         className="absolute top-[170px] left-[100px] w-[340px] bg-white border border-neutral-200"
-        style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04)" }}
+        style={{
+          boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04)",
+        }}
       >
         <WindowChrome />
         {/* Table header */}
@@ -97,10 +103,7 @@ function FloatingElements() {
               className="inline-flex w-fit items-center gap-[3px] px-1 py-0.5 font-mono text-[7px] font-bold uppercase tracking-[0.04em]"
               style={{ border: `1px solid ${r.c}`, color: r.c }}
             >
-              <span
-                className="size-[4px]"
-                style={{ backgroundColor: r.c }}
-              />
+              <span className="size-[4px]" style={{ backgroundColor: r.c }} />
               {r.s}
             </span>
           </div>
@@ -170,62 +173,62 @@ function FloatingElements() {
 
 export function Hero() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 md:px-10 min-h-[calc(100vh-4rem)] flex items-center py-16 lg:py-0">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-12 lg:gap-6 items-center w-full">
-        {/* Left — text content */}
-        <div className="max-w-xl">
-          {/* Section label */}
-          <div className="flex items-center gap-2.5 mb-8">
-            <div className="size-[7px] rounded-full bg-accent-500" />
-            <span className="whitespace-nowrap text-foreground text-pretty font-mono text-[12px] leading-[100%] tracking-[-0.015rem] uppercase">
-              Open Source
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-foreground font-normal text-[40px] leading-[100%] tracking-[-0.16rem] lg:tracking-[-0.18rem] lg:-ml-1 lg:text-6xl 2xl:text-7xl visible">
-            Understand
-            <br />
-            Your Health Data
-          </h1>
-
-          {/* Sub-headline */}
-          <p className="mt-7 font-display text-[17px] md:text-[18px] text-neutral-500 leading-[1.55] max-w-[420px]">
-            The only open-source platform that parses, normalizes, and tracks
-            health records from any lab, provider, or format.
-          </p>
-
-          {/* Body detail */}
-          <p className="mt-4 font-mono text-[13px] text-neutral-400 leading-[1.65] max-w-[420px]">
-            From lab PDFs to wearable exports — delegate parsing to AI with
-            full provenance, confidence scoring, and insights grounded in your
-            actual records.
-          </p>
-
-          {/* CTAs */}
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <Link
-              href="/register"
-              className="bg-neutral-900 px-5 py-2.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-white hover:bg-neutral-800 transition-colors"
-            >
-              Start tracking for free
-            </Link>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-neutral-900 px-5 py-2.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors"
-            >
-              Star on GitHub →
-            </a>
-          </div>
-        </div>
-
-        {/* Right — floating data elements */}
-        <div className="relative hidden lg:block min-h-[520px]">
-          <FloatingElements />
-        </div>
+    <div className="relative max-w-dvw overflow-x-clip">
+      {/* Central watermark logo */}
+      <div className="-z-0 absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none">
+        <Logo className="size-[80vh]" />
       </div>
-    </section>
+      <section className="mx-auto max-w-[1280px] px-6 md:px-10 min-h-[calc(100vh-4rem)] flex items-center py-16 lg:py-0">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-12 lg:gap-6 items-center w-full">
+          {/* Left — text content */}
+          <div className="max-w-xl">
+            {/* Section label */}
+
+            <div className="flex items-center gap-2.5 mb-8">
+              <DashBadge>Open Source</DashBadge>
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-foreground font-normal text-[40px] leading-[100%] tracking-[-0.16rem] lg:tracking-[-0.18rem] lg:-ml-1 lg:text-6xl 2xl:text-7xl visible">
+              Understand
+              <br />
+              Your Health Data
+            </h1>
+
+            {/* Sub-headline */}
+            <p className="mt-7 font-display text-[17px] md:text-[18px] text-neutral-500 leading-[1.55] max-w-[420px]">
+              The only open-source platform that parses, normalizes, and tracks
+              health records from any lab, provider, or format.
+            </p>
+
+            {/* Body detail */}
+            <p className="mt-4 font-mono text-[13px] text-neutral-400 leading-[1.65] max-w-[420px]">
+              From lab PDFs to wearable exports — delegate parsing to AI with
+              full provenance, confidence scoring, and insights grounded in your
+              actual records.
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <Link href="/register">
+                <Button
+                  text="Start tracking for free"
+                  variant="default"
+                  size="lg"
+                />
+              </Link>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                <Button text="Star on GitHub →" variant="outline" size="lg" />
+              </a>
+            </div>
+          </div>
+
+          {/* Right — floating data elements */}
+          <div className="relative hidden lg:block min-h-[520px]">
+            <FloatingElements />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

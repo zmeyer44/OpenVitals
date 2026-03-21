@@ -203,7 +203,7 @@ export function AIChatPreviewContent() {
       <p className="text-[13px] text-neutral-500 font-body">
         Ask about your health data...
       </p>
-      <div className="mt-3 rounded-lg border border-neutral-100 bg-neutral-50 px-3 py-2">
+      <div className="mt-3 border border-neutral-100 bg-neutral-50 px-3 py-2">
         <p className="text-[12px] text-neutral-400 font-body italic">
           &ldquo;What do my recent lab results mean?&rdquo;
         </p>

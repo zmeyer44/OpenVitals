@@ -70,7 +70,7 @@ export function ProviderCard({ provider, userLocation }: ProviderCardProps) {
         <Avatar
           src={brandIcons[provider.id] ?? null}
           name={provider.name}
-          className="size-14 shrink-0 rounded-xl"
+          className="size-14 shrink-0"
         />
 
         <div className="min-w-0 flex-1">
@@ -99,7 +99,7 @@ export function ProviderCard({ provider, userLocation }: ProviderCardProps) {
               provider[key] ? (
                 <span
                   key={key}
-                  className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600"
+                  className="inline-flex items-center bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600"
                 >
                   {label}
                 </span>
@@ -119,7 +119,7 @@ export function ProviderCard({ provider, userLocation }: ProviderCardProps) {
               <button
                 onClick={() => setExpanded(!expanded)}
                 className={cn(
-                  "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5",
+                  "inline-flex items-center gap-1.5 px-3 py-1.5",
                   "bg-[var(--color-accent-500)] text-white text-xs font-medium",
                   "transition-colors hover:bg-[var(--color-accent-600)]",
                 )}
@@ -189,7 +189,7 @@ export function ProviderCard({ provider, userLocation }: ProviderCardProps) {
                   href={`https://www.google.com/maps/place/?q=place_id:${place.placeId}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-neutral-100"
+                  className="flex items-center gap-3 px-2 py-2 transition-colors hover:bg-neutral-100"
                 >
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-neutral-400" />
                   <div className="min-w-0 flex-1">

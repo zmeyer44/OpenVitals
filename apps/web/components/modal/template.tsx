@@ -18,7 +18,7 @@ export function Template({
   return (
     <div
       className={cn(
-        'isolate w-full rounded-lg bg-background md:max-w-md md:border md:shadow',
+        'isolate w-full bg-background md:max-w-md md:border md:shadow',
         className
       )}
       {...props}
@@ -43,7 +43,7 @@ export function FormFooter({ children, className, ...props }: ComponentProps<'di
   return (
     <div
       className={cn(
-        'flex items-center justify-end rounded-b-lg border-border border-t bg-muted/40 p-4',
+        'flex items-center justify-end border-border border-t bg-muted/40 p-4',
         className
       )}
       {...props}

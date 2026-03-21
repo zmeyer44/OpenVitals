@@ -26,7 +26,7 @@ export function GreetingHeader({ firstName, summaryLine, abnormalCount }: Greeti
         {greeting}{displayName}
       </h1>
       <div className="mt-2 flex items-center gap-3">
-        <p className="text-[14px] text-neutral-500 font-body">{summaryLine}</p>
+        <p className="text-[14px] text-neutral-500 font-display">{summaryLine}</p>
         {abnormalCount > 0 && (
           <StatusBadge status="warning" label={`${abnormalCount} flagged`} />
         )}

@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { Logo } from "@/assets/app/images/logo";
-import { GITHUB_URL } from "@/constants/app";
-
+import { GITHUB_URL, LINKEDIN_URL, X_URL } from "@/constants/app";
+import { DashBadge } from "@/components/decorations/dot-badge";
 const linkHrefs: Record<string, string> = {
   Privacy: "/privacy",
   Terms: "/terms",
   Integrations: "/features/integrations",
   GitHub: GITHUB_URL,
+  Xtwitter: X_URL,
+  LinkedIn: LINKEDIN_URL,
 };
 
 const columns = [
@@ -31,17 +33,9 @@ const columns = [
 export function Footer() {
   return (
     <footer className="px-6 md:px-10 pb-8">
-      <div className="mx-auto max-w-[1280px] border border-neutral-200 bg-white">
-        {/* Footer label */}
-        <div className="flex items-center gap-2.5 px-8 md:px-10 pt-8 md:pt-10 mb-10 md:mb-14">
-          <div className="size-[7px] rounded-full bg-accent-500" />
-          <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-500">
-            Footer
-          </span>
-        </div>
-
+      <div className="mx-auto max-w-[1280px] border border-neutral-200 bg-white rounded-xl">
         {/* Columns */}
-        <div className="px-8 md:px-10 pb-10 md:pb-14">
+        <div className="p-8 px-8 md:px-10 md:pt-10 pb-10 md:pb-14">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {columns.map((col) => (
               <div key={col.title}>
@@ -80,12 +74,15 @@ export function Footer() {
         <div className="border-t border-neutral-200 px-8 md:px-10 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Logo className="size-5 text-neutral-900" />
-            <span className="font-mono text-[11px] text-neutral-400">
+
+            <a
+              href={X_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[11px] text-neutral-400 hover:text-neutral-900 transition-colors"
+            >
               X (Twitter)
-            </span>
-            <span className="font-mono text-[11px] text-neutral-400">
-              LinkedIn
-            </span>
+            </a>
             <a
               href={GITHUB_URL}
               target="_blank"
@@ -94,9 +91,17 @@ export function Footer() {
             >
               GitHub
             </a>
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[11px] text-neutral-400 hover:text-neutral-900 transition-colors"
+            >
+              LinkedIn
+            </a>
           </div>
           <span className="font-mono text-[11px] text-neutral-400">
-            @OpenVitals 2026. All rights reserved.
+            {`@OpenVitals ${new Date().getFullYear()}. All rights reserved.`}
           </span>
         </div>
       </div>

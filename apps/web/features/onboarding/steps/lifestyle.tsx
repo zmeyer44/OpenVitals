@@ -36,7 +36,7 @@ function OptionRow({ label, options, value, onSelect }: { label: string; options
             type="button"
             onClick={() => onSelect(o.id)}
             className={cn(
-              'rounded-lg border px-3 py-2 text-[12px] font-medium transition-all cursor-pointer',
+              'border px-3 py-2 text-[12px] font-medium transition-all cursor-pointer',
               value === o.id
                 ? 'border-accent-500 bg-accent-50 text-accent-700'
                 : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'

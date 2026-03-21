@@ -16,10 +16,10 @@ export function BiomarkerCard({ biomarker }: BiomarkerCardProps) {
   return (
     <div
       className={cn(
-        "group rounded-xl border bg-white transition-all duration-200 cursor-pointer",
+        "group border bg-white transition-all duration-200 cursor-pointer",
         expanded
-          ? "border-neutral-200 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
-          : "border-neutral-100 hover:border-neutral-200",
+          ? "border-neutral-900"
+          : "border-neutral-200 hover:border-neutral-900",
       )}
       onClick={() => setExpanded(!expanded)}
     >
@@ -27,19 +27,19 @@ export function BiomarkerCard({ biomarker }: BiomarkerCardProps) {
         {/* Name + toggle */}
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <div className="text-[14px] font-medium text-neutral-900 font-body leading-snug">
+            <div className="font-display text-[14px] font-medium text-neutral-900 leading-snug">
               {biomarker.name}
             </div>
-            <div className="mt-1 text-[12px] leading-[1.5] text-neutral-400 font-body line-clamp-1">
+            <div className="mt-1 font-display text-[12px] leading-[1.5] text-neutral-400 line-clamp-1">
               {biomarker.description}
             </div>
           </div>
           <div
             className={cn(
-              "flex size-6 shrink-0 items-center justify-center rounded-full transition-colors mt-0.5",
+              "flex size-6 shrink-0 items-center justify-center transition-colors mt-0.5",
               expanded
                 ? "bg-neutral-900 text-white"
-                : "bg-neutral-100 text-neutral-400 group-hover:bg-neutral-200",
+                : "border border-neutral-200 text-neutral-400 group-hover:border-neutral-900 group-hover:text-neutral-900",
             )}
           >
             {expanded ? (
@@ -50,15 +50,15 @@ export function BiomarkerCard({ biomarker }: BiomarkerCardProps) {
           </div>
         </div>
 
-        {/* Pills */}
+        {/* Tags */}
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
           {biomarker.unit && (
-            <span className="rounded-md bg-neutral-50 px-2 py-0.5 text-[10px] font-mono text-neutral-500 border border-neutral-100">
+            <span className="border border-neutral-200 bg-neutral-50 px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.04em] text-neutral-500">
               {biomarker.unit}
             </span>
           )}
           {biomarker.referenceRangeText && (
-            <span className="rounded-md bg-neutral-50 px-2 py-0.5 text-[10px] font-mono text-neutral-400 border border-neutral-100">
+            <span className="border border-neutral-200 bg-neutral-50 px-2 py-0.5 font-mono text-[9px] tracking-[0.02em] text-neutral-400">
               {biomarker.referenceRangeText}
             </span>
           )}
@@ -74,17 +74,17 @@ export function BiomarkerCard({ biomarker }: BiomarkerCardProps) {
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="overflow-hidden"
             >
-              <div className="mt-4 border-t border-neutral-100 pt-4 space-y-3">
+              <div className="mt-4 border-t border-neutral-200 pt-4 space-y-3">
                 {biomarker.aliases.length > 0 && (
                   <div>
-                    <div className="mb-2 text-[10px] font-medium uppercase tracking-[0.06em] text-neutral-300 font-mono">
+                    <div className="mb-2 font-mono text-[9px] font-bold uppercase tracking-[0.08em] text-neutral-400">
                       Also known as
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {biomarker.aliases.map((alias) => (
                         <span
                           key={alias}
-                          className="inline-block rounded-md border border-neutral-100 px-2 py-0.5 text-[10px] text-neutral-400 font-mono"
+                          className="inline-block border border-neutral-200 px-2 py-0.5 font-mono text-[9px] text-neutral-500"
                         >
                           {alias}
                         </span>
@@ -92,7 +92,7 @@ export function BiomarkerCard({ biomarker }: BiomarkerCardProps) {
                     </div>
                   </div>
                 )}
-                <div className="text-[10px] text-neutral-300 font-mono">
+                <div className="font-mono text-[9px] text-neutral-300 uppercase tracking-[0.04em]">
                   {biomarker.id}
                 </div>
               </div>

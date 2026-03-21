@@ -10,7 +10,7 @@ export function NavSearch() {
         <input
           type="text"
           placeholder="Search..."
-          className="w-44 pl-8 h-9 pr-3 py-1.5 text-[13px] bg-neutral-100 border-0 rounded-md placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-300 focus:bg-white transition-all"
+          className="w-44 pl-8 h-9 pr-3 py-1.5 text-[13px] bg-neutral-100 border-0 placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-300 focus:bg-white transition-all"
         />
       </div>
     </div>

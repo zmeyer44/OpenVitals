@@ -1,19 +1,86 @@
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/button";
+import Link from "next/link";
 import { Spark } from "../components/spark";
+import { DashBadge } from "@/components/decorations/dot-badge";
 
 /* ------------------------------------------------------------------ */
 /*  Parsed results data                                                */
 /* ------------------------------------------------------------------ */
 
 const parsedRows = [
-  { metric: "LDL Cholesterol", val: "98", unit: "mg/dL", ref: "0–100", st: "NORMAL", c: "#16A34A", trend: [142, 130, 118, 98] },
-  { metric: "HDL Cholesterol", val: "58", unit: "mg/dL", ref: "> 40", st: "NORMAL", c: "#16A34A", trend: [52, 54, 56, 58] },
-  { metric: "Triglycerides", val: "162", unit: "mg/dL", ref: "< 150", st: "BORDER", c: "#D97706", trend: [135, 142, 155, 162] },
-  { metric: "HbA1c", val: "5.9", unit: "%", ref: "< 5.7", st: "BORDER", c: "#D97706", trend: [5.2, 5.4, 5.6, 5.9] },
-  { metric: "Ferritin", val: "14", unit: "ng/mL", ref: "20–300", st: "LOW", c: "#DC2626", trend: [45, 32, 18, 14] },
-  { metric: "Vitamin D", val: "22", unit: "ng/mL", ref: "30–100", st: "LOW", c: "#DC2626", trend: [42, 35, 28, 22] },
-  { metric: "TSH", val: "2.1", unit: "mU/L", ref: "0.4–4.0", st: "NORMAL", c: "#16A34A", trend: [1.8, 1.9, 2.0, 2.1] },
-  { metric: "Glucose", val: "92", unit: "mg/dL", ref: "70–100", st: "NORMAL", c: "#16A34A", trend: [88, 90, 91, 92] },
+  {
+    metric: "LDL Cholesterol",
+    val: "98",
+    unit: "mg/dL",
+    ref: "0–100",
+    st: "NORMAL",
+    c: "#16A34A",
+    trend: [142, 130, 118, 98],
+  },
+  {
+    metric: "HDL Cholesterol",
+    val: "58",
+    unit: "mg/dL",
+    ref: "> 40",
+    st: "NORMAL",
+    c: "#16A34A",
+    trend: [52, 54, 56, 58],
+  },
+  {
+    metric: "Triglycerides",
+    val: "162",
+    unit: "mg/dL",
+    ref: "< 150",
+    st: "BORDER",
+    c: "#D97706",
+    trend: [135, 142, 155, 162],
+  },
+  {
+    metric: "HbA1c",
+    val: "5.9",
+    unit: "%",
+    ref: "< 5.7",
+    st: "BORDER",
+    c: "#D97706",
+    trend: [5.2, 5.4, 5.6, 5.9],
+  },
+  {
+    metric: "Ferritin",
+    val: "14",
+    unit: "ng/mL",
+    ref: "20–300",
+    st: "LOW",
+    c: "#DC2626",
+    trend: [45, 32, 18, 14],
+  },
+  {
+    metric: "Vitamin D",
+    val: "22",
+    unit: "ng/mL",
+    ref: "30–100",
+    st: "LOW",
+    c: "#DC2626",
+    trend: [42, 35, 28, 22],
+  },
+  {
+    metric: "TSH",
+    val: "2.1",
+    unit: "mU/L",
+    ref: "0.4–4.0",
+    st: "NORMAL",
+    c: "#16A34A",
+    trend: [1.8, 1.9, 2.0, 2.1],
+  },
+  {
+    metric: "Glucose",
+    val: "92",
+    unit: "mg/dL",
+    ref: "70–100",
+    st: "NORMAL",
+    c: "#16A34A",
+    trend: [88, 90, 91, 92],
+  },
 ];
 
 const navItems = [
@@ -34,13 +101,7 @@ export function Ingestion() {
         {/* ── Left side ── */}
         <div className="lg:ml-auto lg:max-w-[640px] w-full px-6 md:px-10 py-14 lg:py-20">
           {/* Section label */}
-          <div className="flex items-center gap-2.5 mb-8">
-            <div className="size-[7px] rounded-full bg-accent-500" />
-            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-900">
-              Ingestion
-            </span>
-          </div>
-
+          <DashBadge className="mb-8">Ingestion</DashBadge>
           {/* Headline */}
           <h2 className="font-display text-[32px] md:text-[40px] font-medium tracking-[-0.03em] leading-[1.1] text-neutral-900">
             Drop your lab report.
@@ -50,9 +111,8 @@ export function Ingestion() {
 
           {/* Body */}
           <p className="mt-5 font-mono text-[14px] text-neutral-400 leading-[1.65] max-w-[440px]">
-            The pipeline classifies, extracts, normalizes,
-            and maps to standard codes. You review anything
-            that&apos;s uncertain.
+            The pipeline classifies, extracts, normalizes, and maps to standard
+            codes. You review anything that&apos;s uncertain.
           </p>
 
           {/* ── Card ── */}
@@ -118,17 +178,13 @@ export function Ingestion() {
                 AI-powered parsing
               </h3>
               <p className="mt-2 font-display text-[14px] text-neutral-500 leading-[1.6]">
-                Upload any lab report PDF. AI classifies the document,
-                extracts every value, normalizes units, and maps to
-                standard medical codes — with confidence scores on
-                every extraction.
+                Upload any lab report PDF. AI classifies the document, extracts
+                every value, normalizes units, and maps to standard medical
+                codes — with confidence scores on every extraction.
               </p>
-              <a
-                href="/register"
-                className="mt-5 inline-flex items-center bg-neutral-900 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white hover:bg-neutral-800 transition-colors"
-              >
-                Learn more →
-              </a>
+              <Link href="/register">
+                <Button text="Learn more →" variant="default" />
+              </Link>
             </div>
           </div>
         </div>
@@ -240,18 +296,17 @@ export function Ingestion() {
                 +
               </span>
             ))}
-            {[
-              "top-[130px] right-[60px]",
-              "bottom-[120px] left-[50px]",
-            ].map((pos, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "absolute size-[5px] rounded-full bg-neutral-300/40 pointer-events-none",
-                  pos,
-                )}
-              />
-            ))}
+            {["top-[130px] right-[60px]", "bottom-[120px] left-[50px]"].map(
+              (pos, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "absolute size-[5px] rounded-full bg-neutral-300/40 pointer-events-none",
+                    pos,
+                  )}
+                />
+              ),
+            )}
           </div>
         </div>
       </div>

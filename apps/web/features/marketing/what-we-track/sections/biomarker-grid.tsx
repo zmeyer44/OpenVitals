@@ -52,17 +52,17 @@ export function BiomarkerGrid({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search biomarkers, aliases, or categories..."
-          className="w-full rounded-xl border border-neutral-200/80 bg-white py-3 pl-11 pr-4 text-[14px] text-neutral-900 placeholder:text-neutral-300 focus:border-neutral-300 focus:outline-none focus:ring-4 focus:ring-neutral-900/[0.03] transition-all font-body"
+          className="w-full border border-neutral-200 bg-white py-3 pl-11 pr-4 font-mono text-[13px] text-neutral-900 placeholder:text-neutral-300 focus:border-neutral-900 focus:outline-none transition-all"
         />
       </div>
 
       {/* Results */}
       {filtered.length === 0 ? (
         <div className="py-24 text-center">
-          <p className="text-[15px] font-medium text-neutral-900 font-body">
+          <p className="font-display text-[15px] font-medium text-neutral-900">
             No biomarkers match &ldquo;{searchQuery}&rdquo;
           </p>
-          <p className="mt-1 text-[13px] text-neutral-400 font-body">
+          <p className="mt-1 font-display text-[13px] text-neutral-400">
             Try a different search term or browse the categories.
           </p>
         </div>
@@ -82,26 +82,26 @@ export function BiomarkerGrid({
               >
                 {/* Divider between sections */}
                 {i > 0 && (
-                  <div className="mb-10 border-t border-neutral-100" />
+                  <div className="mb-10 border-t border-neutral-200" />
                 )}
 
                 {/* Section heading */}
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-neutral-100/80">
+                  <div className="flex size-8 items-center justify-center border border-neutral-200 bg-neutral-50">
                     <Icon className="size-4 text-neutral-400" />
                   </div>
                   <div>
-                    <h2 className="text-[16px] font-medium text-neutral-900 tracking-[-0.01em] font-body">
+                    <h2 className="font-display text-[15px] font-medium text-neutral-900 tracking-[-0.01em]">
                       {config.label}
                     </h2>
-                    <p className="text-[11px] text-neutral-300 font-mono">
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-neutral-400">
                       {items.length} biomarker{items.length !== 1 ? "s" : ""}
                     </p>
                   </div>
                 </div>
 
                 {/* Card grid */}
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-px sm:grid-cols-2 border border-neutral-200">
                   {items.map((biomarker) => (
                     <BiomarkerCard key={biomarker.id} biomarker={biomarker} />
                   ))}

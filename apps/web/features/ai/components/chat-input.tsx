@@ -57,7 +57,7 @@ export function ChatInput({
   return (
     <form onSubmit={handleSubmit} className={cn('px-4 pb-4', className)}>
       <div className="mx-auto max-w-2xl">
-        <div className="flex items-end gap-2 rounded-2xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition-all focus-within:border-accent-300 focus-within:shadow-md focus-within:ring-2 focus-within:ring-accent-100">
+        <div className="flex items-end gap-2 rounded-2xl border border-neutral-200 bg-white px-4 py-3 transition-all focus-within:border-accent-300 focus-within:ring-2 focus-within:ring-accent-100">
           <textarea
             ref={textareaRef}
             value={value}
@@ -68,14 +68,14 @@ export function ChatInput({
             className="max-h-[200px] min-h-[26px] flex-1 resize-none bg-transparent text-[14px] text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-0 focus:shadow-none! font-body"
           />
           {isStreaming ? (
-            <button type="button" onClick={onStop} className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-neutral-900 text-white transition-all hover:bg-neutral-800 active:scale-95">
+            <button type="button" onClick={onStop} className="flex size-8 shrink-0 items-center justify-center bg-neutral-900 text-white transition-all hover:bg-neutral-800 active:scale-95">
               <Square className="size-3" fill="currentColor" />
             </button>
           ) : (
             <button
               type="submit"
               disabled={!value.trim()}
-              className="flex size-8 shrink-0 items-center justify-center rounded-lg text-white transition-all active:scale-95 disabled:opacity-30"
+              className="flex size-8 shrink-0 items-center justify-center text-white transition-all active:scale-95 disabled:opacity-30"
               style={{ background: value.trim() ? 'linear-gradient(135deg, #3162FF, #2750D9)' : '#D6DCFF' }}
             >
               <ArrowUp className="size-4" />

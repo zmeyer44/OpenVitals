@@ -15,36 +15,31 @@ interface StatusBadgeProps {
 
 const statusStyles: Record<
   HealthStatus,
-  { bg: string; text: string; border: string; dot: string }
+  { text: string; border: string; dot: string }
 > = {
   normal: {
-    bg: "bg-[var(--color-health-normal-bg)]",
     text: "text-[var(--color-health-normal)]",
-    border: "border-[var(--color-health-normal-border)]",
+    border: "border-[var(--color-health-normal)]",
     dot: "bg-[var(--color-health-normal)]",
   },
   warning: {
-    bg: "bg-[var(--color-health-warning-bg)]",
     text: "text-[var(--color-health-warning)]",
-    border: "border-[var(--color-health-warning-border)]",
+    border: "border-[var(--color-health-warning)]",
     dot: "bg-[var(--color-health-warning)]",
   },
   critical: {
-    bg: "bg-[var(--color-health-critical-bg)]",
     text: "text-[var(--color-health-critical)]",
-    border: "border-[var(--color-health-critical-border)]",
+    border: "border-[var(--color-health-critical)]",
     dot: "bg-[var(--color-health-critical)]",
   },
   info: {
-    bg: "bg-[var(--color-health-info-bg)]",
     text: "text-[var(--color-health-info)]",
-    border: "border-[var(--color-health-info-border)]",
+    border: "border-[var(--color-health-info)]",
     dot: "bg-[var(--color-health-info)]",
   },
   neutral: {
-    bg: "bg-neutral-100",
     text: "text-neutral-600",
-    border: "border-neutral-200",
+    border: "border-neutral-300",
     dot: "bg-neutral-400",
   },
 };
@@ -54,14 +49,13 @@ export function StatusBadge({ status, label, className }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center min-w-0 gap-[5px] rounded-full border px-2.5 py-[3px] text-xs font-medium tracking-[0.01em] truncate",
-        s.bg,
+        "inline-flex items-center min-w-0 gap-[4px] border px-2 py-[3px] font-mono text-[10px] font-bold uppercase tracking-[0.04em] truncate",
         s.text,
         s.border,
         className,
       )}
     >
-      <span className={cn("h-1.5 w-1.5 rounded-full", s.dot)} />
+      <span className={cn("size-[5px] shrink-0", s.dot)} />
       {label}
     </span>
   );

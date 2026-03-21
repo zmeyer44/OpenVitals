@@ -11,10 +11,10 @@ interface MedicationCardProps {
 
 export function MedicationCard({ name, dose, frequency, indication, status, startDate }: MedicationCardProps) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-accent-300 hover:shadow-[0_2px_12px_var(--color-accent-50)]">
+    <div className="border border-neutral-200 bg-white p-5 transition-all hover:border-accent-300">
       <div className="mb-3 flex items-start justify-between">
         <div>
-          <div className="text-[15px] font-semibold text-neutral-900 font-body">
+          <div className="text-[15px] font-semibold text-neutral-900 font-display">
             {name}
           </div>
           <div className="mt-0.5 text-xs text-neutral-500 font-mono">
@@ -26,7 +26,7 @@ export function MedicationCard({ name, dose, frequency, indication, status, star
           label={status === 'active' ? 'Active' : 'Discontinued'}
         />
       </div>
-      <div className="mb-2.5 text-[13px] leading-relaxed text-neutral-600 font-body">
+      <div className="mb-2.5 text-[13px] leading-relaxed text-neutral-600 font-display">
         {indication}
       </div>
       <div className="text-[11px] text-neutral-400 font-mono">

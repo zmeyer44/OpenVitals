@@ -49,7 +49,7 @@ export function StepButtons({
           onClick={onNext}
           disabled={nextDisabled}
           className={cn(
-            'rounded-md px-5 py-2 text-[13px] font-medium transition-all active:scale-[0.98] cursor-pointer',
+            'px-5 py-2 text-[13px] font-medium transition-all active:scale-[0.98] cursor-pointer',
             nextDisabled
               ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed'
               : 'bg-neutral-900 text-white hover:bg-neutral-800'

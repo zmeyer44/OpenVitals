@@ -56,7 +56,7 @@ export function FeedbackPopover() {
       <PopoverTrigger asChild>
         <button
           className={cn(
-            "hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[13px] font-medium transition-colors",
+            "hidden md:flex items-center gap-1.5 px-2.5 py-1.5 text-[13px] font-medium transition-colors",
             "text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50"
           )}
         >
@@ -77,7 +77,7 @@ export function FeedbackPopover() {
                 type="button"
                 onClick={() => setRating(rating === r.value ? null : r.value)}
                 className={cn(
-                  "text-2xl p-1.5 rounded-md transition-colors",
+                  "text-2xl p-1.5 transition-colors",
                   rating === r.value
                     ? "bg-accent-100 ring-1 ring-accent-300"
                     : "hover:bg-neutral-100"

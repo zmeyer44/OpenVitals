@@ -47,7 +47,7 @@ export function Tooltip({
         <TooltipPrimitive.Content
           sideOffset={8}
           side={side}
-          className="animate-scale-in pointer-events-auto z-[99] items-center overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm"
+          className="animate-scale-in pointer-events-auto z-[99] items-center overflow-hidden border border-neutral-200 bg-white"
           collisionPadding={0}
           {...rest}
         >

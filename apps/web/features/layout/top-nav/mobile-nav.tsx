@@ -42,7 +42,7 @@ export function MobileNav({ pathname, pendingCount }: MobileNavProps) {
         {/* Animated highlight for mobile */}
         {activeIndex !== -1 && highlightStyle.width > 0 && (
           <motion.div
-            className="absolute h-[28px] bg-neutral-100 rounded-md -z-0"
+            className="absolute h-[28px] bg-neutral-900 -z-0"
             initial={false}
             animate={{
               left: highlightStyle.left,
@@ -67,14 +67,14 @@ export function MobileNav({ pathname, pendingCount }: MobileNavProps) {
               href={item.href}
               data-nav-item
               className={cn(
-                'relative flex items-center gap-1 px-2.5 py-1 rounded-md text-[12px] font-medium whitespace-nowrap transition-colors z-10',
-                isActive ? 'text-neutral-900' : 'text-neutral-500'
+                'relative flex items-center gap-1 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.04em] whitespace-nowrap transition-colors z-10',
+                isActive ? 'text-white' : 'text-neutral-500'
               )}
             >
               <item.icon className="h-3.5 w-3.5" />
               {item.name}
               {hasBadge && (
-                <span className="ml-1 px-1 py-0.5 text-[9px] font-semibold bg-amber-100 text-amber-700 rounded-full">
+                <span className="ml-1 px-1 py-0.5 text-[9px] font-semibold bg-amber-100 text-amber-700">
                   {pendingCount}
                 </span>
               )}

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/button";
 import { Logo, LogoWordmark } from "@/assets/app/images/logo";
 import { MenuIcon } from "@/assets/icons/menu";
 import { XIcon } from "@/assets/icons/x";
@@ -36,8 +37,7 @@ export function Nav() {
         <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 md:px-10 h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <LogoWordmark />
-            
+            <LogoWordmark />
           </Link>
 
           {/* Center nav links */}
@@ -47,16 +47,18 @@ export function Nav() {
                 <Link
                   key={l.label}
                   href={l.href}
-                  className="font-mono text-[12px] font-medium uppercase tracking-[0.06em] text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors"
+                  className="group relative font-mono text-[12px] font-medium uppercase tracking-[0.06em] text-neutral-600 hover:text-accent-500 cursor-pointer transition-colors py-1"
                 >
                   {l.label}
+                  <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-accent-500 transition-transform duration-200 ease-out group-hover:scale-x-100" />
                 </Link>
               ) : (
                 <span
                   key={l.label}
-                  className="font-mono text-[12px] font-medium uppercase tracking-[0.06em] text-neutral-600 hover:text-neutral-900 cursor-pointer transition-colors"
+                  className="group relative font-mono text-[12px] font-medium uppercase tracking-[0.06em] text-neutral-600 hover:text-accent-500 cursor-pointer transition-colors py-1"
                 >
                   {l.label}
+                  <span className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-accent-500 transition-transform duration-200 ease-out group-hover:scale-x-100" />
                 </span>
               ),
             )}
@@ -64,17 +66,11 @@ export function Nav() {
 
           {/* Right: buttons + hamburger */}
           <div className="flex items-center gap-2 shrink-0">
-            <Link
-              href="/login"
-              className="hidden sm:block bg-neutral-900 px-4 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white hover:bg-neutral-800 transition-colors"
-            >
-              Log in
+            <Link href="/login" className="hidden sm:block">
+              <Button text="Log in" variant="default" size="sm" />
             </Link>
-            <Link
-              href="/register"
-              className="hidden sm:block border border-neutral-900 px-4 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-neutral-900 hover:bg-neutral-900 hover:text-white transition-colors"
-            >
-              Get started
+            <Link href="/register" className="hidden sm:block">
+              <Button text="Get started" variant="outline" size="sm" />
             </Link>
 
             <button
@@ -153,12 +149,8 @@ export function Nav() {
               : "0ms",
           }}
         >
-          <Link
-            href="/register"
-            className="bg-neutral-900 px-5 py-2.5 font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-white"
-            onClick={close}
-          >
-            Get started
+          <Link href="/register" onClick={close}>
+            <Button text="Get started" variant="default" size="sm" />
           </Link>
           <Link
             href="/login"

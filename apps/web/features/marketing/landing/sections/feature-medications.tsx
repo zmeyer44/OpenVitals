@@ -1,4 +1,7 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/button";
+import { DashBadge } from "@/components/decorations/dot-badge";
 
 const meds = [
   {
@@ -28,29 +31,23 @@ export function Medications() {
         {/* Header row */}
         <div className="flex items-start justify-between gap-8 mb-10">
           <div className="max-w-xl">
-            <div className="flex items-center gap-2.5 mb-8">
-              <div className="size-[7px] rounded-full bg-accent-500" />
-              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-900">
-                Medications
-              </span>
-            </div>
+            <DashBadge className="mb-8">Medications</DashBadge>
             <h2 className="font-display text-[32px] md:text-[40px] font-medium tracking-[-0.03em] leading-[1.1] text-neutral-900">
               See how your medications
               <br />
               connect to your labs.
             </h2>
             <p className="mt-5 font-mono text-[14px] text-neutral-400 leading-[1.65] max-w-[440px]">
-              Active medications, supplements, dosage, frequency,
-              and daily adherence — all linked to your health
-              timeline and lab results.
+              Active medications, supplements, dosage, frequency, and daily
+              adherence — all linked to your health timeline and lab results.
             </p>
           </div>
-          <a
+          <Link
             href="/register"
-            className="hidden md:inline-flex items-center bg-neutral-900 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white hover:bg-neutral-800 transition-colors shrink-0 mt-12"
+            className="hidden md:inline-flex shrink-0 mt-12"
           >
-            Learn more →
-          </a>
+            <Button text="Learn more →" variant="default" />
+          </Link>
         </div>
 
         {/* Medication cards — window style */}
@@ -74,16 +71,21 @@ export function Medications() {
 
           {/* Table header */}
           <div className="grid grid-cols-[1.2fr_1fr_1fr_0.6fr_0.8fr_0.6fr] gap-2 px-5 py-2 border-b border-neutral-200 bg-neutral-50/60">
-            {["MEDICATION", "DOSAGE", "PURPOSE", "STATUS", "LINKED LABS", "STARTED"].map(
-              (h) => (
-                <div
-                  key={h}
-                  className="font-mono text-[8px] font-bold uppercase tracking-[0.08em] text-neutral-400"
-                >
-                  {h}
-                </div>
-              ),
-            )}
+            {[
+              "MEDICATION",
+              "DOSAGE",
+              "PURPOSE",
+              "STATUS",
+              "LINKED LABS",
+              "STARTED",
+            ].map((h) => (
+              <div
+                key={h}
+                className="font-mono text-[8px] font-bold uppercase tracking-[0.08em] text-neutral-400"
+              >
+                {h}
+              </div>
+            ))}
           </div>
 
           {/* Rows */}
@@ -125,12 +127,9 @@ export function Medications() {
         </div>
 
         {/* Mobile CTA */}
-        <a
-          href="/register"
-          className="mt-6 md:hidden inline-flex items-center bg-neutral-900 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white"
-        >
-          Learn more →
-        </a>
+        <Link href="/register" className="mt-6 md:hidden inline-flex">
+          <Button text="Learn more →" variant="default" />
+        </Link>
       </div>
     </section>
   );

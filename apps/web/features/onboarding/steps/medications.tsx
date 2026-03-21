@@ -33,7 +33,7 @@ interface MedicationsStepProps {
 }
 
 const inputClass =
-  'w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all';
+  'w-full border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all';
 
 export function MedicationsStep({ data, onChange, onNext, onBack, onSkip, direction }: MedicationsStepProps) {
   const addMed = () => onChange({ ...data, medications: [...data.medications, { name: '', dosage: '', frequency: '' }], noMedications: false });
@@ -74,7 +74,7 @@ export function MedicationsStep({ data, onChange, onNext, onBack, onSkip, direct
           {!data.noMedications && data.medications.length > 0 && (
             <div className="space-y-2 mb-3">
               {data.medications.map((med, i) => (
-                <div key={i} className="flex items-start gap-2 rounded-lg border border-neutral-200 bg-white p-3">
+                <div key={i} className="flex items-start gap-2 border border-neutral-200 bg-white p-3">
                   <div className="grid flex-1 grid-cols-3 gap-2">
                     <input type="text" value={med.name} onChange={(e) => updateMed(i, 'name', e.target.value)} className={inputClass} placeholder="Medication name" />
                     <input type="text" value={med.dosage} onChange={(e) => updateMed(i, 'dosage', e.target.value)} className={inputClass} placeholder="Dosage (e.g. 20mg)" />
@@ -118,7 +118,7 @@ export function MedicationsStep({ data, onChange, onNext, onBack, onSkip, direct
           {!data.noAllergies && data.allergies.length > 0 && (
             <div className="space-y-2 mb-3">
               {data.allergies.map((alg, i) => (
-                <div key={i} className="flex items-start gap-2 rounded-lg border border-neutral-200 bg-white p-3">
+                <div key={i} className="flex items-start gap-2 border border-neutral-200 bg-white p-3">
                   <div className="grid flex-1 grid-cols-2 gap-2">
                     <input type="text" value={alg.name} onChange={(e) => updateAllergy(i, 'name', e.target.value)} className={inputClass} placeholder="Allergen (e.g. Penicillin)" />
                     <input type="text" value={alg.reaction} onChange={(e) => updateAllergy(i, 'reaction', e.target.value)} className={inputClass} placeholder="Reaction (e.g. Rash)" />

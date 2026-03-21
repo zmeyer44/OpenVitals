@@ -1,4 +1,7 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/button";
+import { DashBadge } from "@/components/decorations/dot-badge";
 
 const navItems = [
   { num: "01", label: "HEALTH CHAT", active: true },
@@ -14,12 +17,8 @@ export function AiChat() {
         {/* ── Left side ── */}
         <div className="lg:ml-auto lg:max-w-[640px] w-full px-6 md:px-10 py-14 lg:py-20">
           {/* Section label */}
-          <div className="flex items-center gap-2.5 mb-8">
-            <div className="size-[7px] rounded-full bg-accent-500" />
-            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-neutral-900">
-              AI
-            </span>
-          </div>
+
+          <DashBadge className="mb-8">AI</DashBadge>
 
           {/* Headline */}
           <h2 className="font-display text-[32px] md:text-[40px] font-medium tracking-[-0.03em] leading-[1.1] text-neutral-900">
@@ -30,9 +29,8 @@ export function AiChat() {
 
           {/* Body */}
           <p className="mt-5 font-mono text-[14px] text-neutral-400 leading-[1.65] max-w-[440px]">
-            Ask questions about your health data and get
-            answers grounded in your actual observations.
-            Every response cites the data it used.
+            Ask questions about your health data and get answers grounded in
+            your actual observations. Every response cites the data it used.
           </p>
 
           {/* ── Card ── */}
@@ -82,14 +80,12 @@ export function AiChat() {
               </h3>
               <p className="mt-2 font-display text-[14px] text-neutral-500 leading-[1.6]">
                 Every AI answer cites specific observations, dates, and sources.
-                No hallucinations — only facts from your verified health records.
+                No hallucinations — only facts from your verified health
+                records.
               </p>
-              <a
-                href="/register"
-                className="mt-5 inline-flex items-center bg-neutral-900 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white hover:bg-neutral-800 transition-colors"
-              >
-                Learn more →
-              </a>
+              <Link href="/register">
+                <Button text="Learn more →" variant="default" />
+              </Link>
             </div>
           </div>
         </div>

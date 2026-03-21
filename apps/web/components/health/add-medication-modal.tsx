@@ -10,9 +10,9 @@ import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 
 const inputClass =
-  'w-full rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-[14px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all';
+  'w-full border border-neutral-200 bg-white px-3 py-2.5 text-[14px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all';
 
-const labelClass = 'block text-[13px] font-medium text-neutral-700 mb-1.5 font-body';
+const labelClass = 'block text-[13px] font-medium text-neutral-700 mb-1.5 font-display';
 
 const categories = [
   { value: 'prescription', label: 'Prescription' },
@@ -104,16 +104,16 @@ export function AddMedicationModal() {
           transition={{ delay: fieldDelay * 1 }}
         >
           <label className={labelClass}>Category</label>
-          <div className="flex gap-1 rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+          <div className="flex gap-1 border border-neutral-200 bg-neutral-50 p-1">
             {categories.map((cat) => (
               <button
                 key={cat.value}
                 type="button"
                 onClick={() => setCategory(cat.value)}
                 className={cn(
-                  'flex-1 rounded-md px-3 py-1.5 text-[13px] font-medium transition-all',
+                  'flex-1 px-3 py-1.5 text-[13px] font-medium transition-all',
                   category === cat.value
-                    ? 'bg-white text-neutral-900 shadow-sm'
+                    ? 'bg-white text-neutral-900'
                     : 'text-neutral-500 hover:text-neutral-700'
                 )}
               >

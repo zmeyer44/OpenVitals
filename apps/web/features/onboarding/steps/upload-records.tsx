@@ -97,7 +97,7 @@ export function UploadRecordsStep({ data, onChange, onNext, onBack, onSkip, dire
         {/* What to upload */}
         <div className="grid grid-cols-2 gap-2">
           {categories.map((cat) => (
-            <div key={cat.label} className="rounded-lg border border-neutral-200 bg-white px-3.5 py-3">
+            <div key={cat.label} className="border border-neutral-200 bg-white px-3.5 py-3">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[13px] text-accent-500 font-mono">{cat.icon}</span>
                 <span className="text-[13px] font-medium text-neutral-800 font-body">{cat.label}</span>
@@ -114,7 +114,7 @@ export function UploadRecordsStep({ data, onChange, onNext, onBack, onSkip, dire
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => { e.preventDefault(); setDragActive(false); addFiles(e.dataTransfer.files); }}
           className={cn(
-            'rounded-xl border-2 border-dashed p-8 text-center transition-colors',
+            'border-2 border-dashed p-8 text-center transition-colors',
             dragActive
               ? 'border-accent-500 bg-accent-50'
               : 'border-neutral-300 bg-white hover:border-neutral-400'
@@ -141,7 +141,7 @@ export function UploadRecordsStep({ data, onChange, onNext, onBack, onSkip, dire
         {data.files.length > 0 && (
           <div className="space-y-1.5">
             {data.files.map((file, i) => (
-              <div key={i} className="flex items-center justify-between rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5">
+              <div key={i} className="flex items-center justify-between border border-neutral-200 bg-white px-3.5 py-2.5">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <FileText className="size-4 shrink-0 text-neutral-400" />
                   <div className="min-w-0">

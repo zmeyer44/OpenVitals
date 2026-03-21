@@ -62,7 +62,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
         >
           <button
             onClick={onNext}
-            className="rounded-md bg-neutral-900 px-8 py-2.5 text-[14px] font-medium text-white hover:bg-neutral-800 transition-all active:scale-[0.98] cursor-pointer font-body"
+            className="bg-neutral-900 px-8 py-2.5 text-[14px] font-medium text-white hover:bg-neutral-800 transition-all active:scale-[0.98] cursor-pointer font-body"
           >
             Get started
           </button>

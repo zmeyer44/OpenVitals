@@ -1,4 +1,7 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/button";
+import { DashBadge } from "@/components/decorations/dot-badge";
 
 const shares = [
   {
@@ -34,12 +37,8 @@ export function Sharing() {
         <div className="relative lg:border-r border-neutral-200 bg-[#f2f2f0] overflow-hidden hidden lg:block">
           <div className="px-10 py-14">
             {/* Corner labels */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="size-[7px] rounded-full bg-accent-500" />
-              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-neutral-400">
-                Share Policies
-              </span>
-            </div>
+
+            <DashBadge className="mb-8">Share Policies</DashBadge>
 
             {/* Floating share policy cards */}
             <div
@@ -147,9 +146,9 @@ export function Sharing() {
 
           {/* Body */}
           <p className="mt-5 font-mono text-[14px] text-neutral-400 leading-[1.65] max-w-[440px]">
-            Create scoped shares by category, time range, and
-            access level. Your cardiologist sees lipids and
-            vitals. Nobody sees what they shouldn&apos;t.
+            Create scoped shares by category, time range, and access level. Your
+            cardiologist sees lipids and vitals. Nobody sees what they
+            shouldn&apos;t.
           </p>
 
           {/* ── Card ── */}
@@ -207,12 +206,9 @@ export function Sharing() {
                 cardiologist sees labs and vitals. Your nutritionist sees
                 diet-related labs. Full audit trail on every access.
               </p>
-              <a
-                href="/register"
-                className="mt-5 inline-flex items-center bg-neutral-900 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-white hover:bg-neutral-800 transition-colors"
-              >
-                Learn more →
-              </a>
+              <Link href="/register">
+                <Button text="Learn more →" variant="default" />
+              </Link>
             </div>
           </div>
         </div>

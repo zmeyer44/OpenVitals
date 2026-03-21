@@ -40,9 +40,9 @@ export function MessageBlock({ message, onArtifactClick }: MessageBlockProps) {
         {!isUser && message.artifactId && (
           <button
             onClick={() => onArtifactClick?.(message.artifactId!)}
-            className="flex w-full items-center gap-3 rounded-xl border border-accent-200 bg-accent-50 p-3.5 text-left transition-all hover:border-accent-300 hover:shadow-sm"
+            className="flex w-full items-center gap-3 border border-accent-200 bg-accent-50 p-3.5 text-left transition-all hover:border-accent-300"
           >
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-100">
+            <div className="flex size-9 shrink-0 items-center justify-center bg-accent-100">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-accent-600">
                 <path d="M9 17H7A5 5 0 017 7h2M15 7h2a5 5 0 010 10h-2M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>

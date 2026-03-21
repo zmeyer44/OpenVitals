@@ -36,12 +36,12 @@ export function PrimaryNav({ pathname }: PrimaryNavProps) {
     <nav className="hidden md:flex items-center gap-1">
       <div
         ref={navRef}
-        className="relative flex items-center bg-neutral-100 rounded-md p-1 px-1"
+        className="relative flex items-center border border-neutral-200 p-0.5"
       >
         {/* Animated highlight */}
         {activeIndex !== -1 && highlightStyle.width > 0 && (
           <motion.div
-            className="absolute h-8 bg-white rounded shadow-sm"
+            className="absolute h-[30px] bg-neutral-900"
             initial={false}
             animate={{
               left: highlightStyle.left,
@@ -65,14 +65,14 @@ export function PrimaryNav({ pathname }: PrimaryNavProps) {
               href={item.href}
               data-nav-item
               className={cn(
-                'relative flex h-8 items-center gap-1.5 px-2.5 py-1.5 rounded text-[13px] font-medium transition-colors z-10',
+                'relative flex h-[30px] items-center gap-1.5 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.04em] transition-colors z-10',
                 isActive
-                  ? 'text-neutral-900'
-                  : 'text-neutral-500 hover:text-neutral-700'
+                  ? 'text-white'
+                  : 'text-neutral-500 hover:text-neutral-900'
               )}
             >
               <item.icon
-                className={cn('h-3.5 w-3.5', isActive && 'text-accent-600')}
+                className={cn('h-3.5 w-3.5', isActive && 'text-white')}
               />
               <span className="hidden lg:inline">{item.name}</span>
             </Link>

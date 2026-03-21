@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#FAF9F7" }}>
+    <div className="min-h-screen bg-neutral-50">
       <Nav />
       <main className="mx-auto max-w-[720px] px-6 py-16">
         <p className="text-[11px] font-mono text-neutral-400 mb-2">

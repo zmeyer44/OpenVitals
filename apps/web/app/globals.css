@@ -1,10 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display:
-    var(--font-geist-sans), "Geist Sans", system-ui, sans-serif;
-  --font-body:
-    var(--font-geist-sans), "Geist Sans", system-ui, sans-serif;
+  --font-display: var(--font-geist-sans), "Geist Sans", system-ui, sans-serif;
+  --font-body: var(--font-geist-sans), "Geist Sans", system-ui, sans-serif;
   --font-mono:
     var(--font-geist-mono), "Geist Mono", "SF Mono", Menlo, monospace;
 
@@ -88,13 +86,14 @@
   --color-testing-on-track: var(--color-health-normal);
   --color-testing-on-track-bg: var(--color-health-normal-bg);
 
-  /* Radius */
-  --radius-xs: 3px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 10px;
-  --radius-2xl: 12px;
+  /* Radius — brutalist: 0 everywhere, full only for avatars */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
   --radius-full: 9999px;
 
   /* Shadows */
@@ -155,37 +154,29 @@
   }
 
   .glass {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.95);
   }
 
   .card-elevated {
     background: white;
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-card);
     border: 1px solid var(--color-neutral-200);
-    transition:
-      border-color 0.15s ease,
-      box-shadow 0.15s ease;
+    transition: border-color 0.15s ease;
   }
 
   .card-elevated:hover {
-    border-color: var(--color-accent-300);
-    box-shadow: 0 2px 12px var(--color-accent-50);
+    border-color: var(--color-neutral-900);
   }
 
   .pill-tabs {
     display: inline-flex;
     padding: 2px;
     background-color: var(--color-neutral-100);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--color-neutral-200);
     gap: 1px;
   }
 
   .pill-tab {
     padding: 5px 12px;
-    border-radius: var(--radius-sm);
     font-size: 13px;
     font-weight: 500;
     color: var(--color-neutral-500);
@@ -200,7 +191,7 @@
   .pill-tab-active {
     background: white;
     color: var(--color-neutral-900);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-neutral-200);
   }
 
   .animate-fade-in {
@@ -317,14 +308,12 @@
   .progress-bar {
     height: 4px;
     background: var(--color-neutral-100);
-    border-radius: var(--radius-full);
     overflow: hidden;
   }
 
   .progress-bar-fill {
     height: 100%;
     background: var(--color-accent-500);
-    border-radius: var(--radius-full);
     transition: width 0.3s ease;
   }
 }

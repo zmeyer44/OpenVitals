@@ -33,7 +33,7 @@ function ResizableHandle({
       {...props}
     >
       {withHandle && (
-        <div className="z-10 flex h-6 w-3 items-center justify-center rounded-sm border border-neutral-300 bg-white">
+        <div className="z-10 flex h-6 w-3 items-center justify-center border border-neutral-300 bg-white">
           <svg width="4" height="10" viewBox="0 0 4 10" fill="none">
             <circle cx="1" cy="2" r="0.75" fill="#999" />
             <circle cx="3" cy="2" r="0.75" fill="#999" />

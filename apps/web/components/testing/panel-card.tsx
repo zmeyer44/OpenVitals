@@ -53,7 +53,7 @@ export function PanelCard({ panel }: PanelCardProps) {
       <div className="mt-auto flex flex-wrap items-center gap-2 pt-1">
         <span
           className={cn(
-            "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium",
+            "inline-flex items-center px-2 py-0.5 text-[11px] font-medium",
             catStyle.bg,
             catStyle.text,
           )}
@@ -62,7 +62,7 @@ export function PanelCard({ panel }: PanelCardProps) {
         </span>
 
         {panel.targetSex && (
-          <span className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600">
+          <span className="inline-flex items-center bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-600">
             {panel.targetSex === "male" ? "Male" : "Female"}
           </span>
         )}

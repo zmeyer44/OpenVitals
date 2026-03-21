@@ -45,7 +45,7 @@ export function InitialView({ input, onInputChange, onSubmit, onSuggestionClick 
             <button
               key={s}
               onClick={() => onSuggestionClick(s)}
-              className="rounded-lg border border-neutral-200 bg-white px-3.5 py-2 text-[12px] text-neutral-600 transition-all hover:border-accent-200 hover:bg-accent-50 hover:text-accent-700 active:scale-[0.98] font-body"
+              className="border border-neutral-200 bg-white px-3.5 py-2 text-[12px] text-neutral-600 transition-all hover:border-accent-200 hover:bg-accent-50 hover:text-accent-700 active:scale-[0.98] font-body"
             >
               {s}
             </button>

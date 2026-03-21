@@ -24,15 +24,8 @@ export function CategoryNav({
 
   if (variant === "pills") {
     return (
-      <nav
-        className="sticky top-12 z-40 -mx-6 px-6 py-3 border-b border-neutral-200/40 overflow-x-auto scrollbar-hide"
-        style={{
-          backgroundColor: "rgba(250,249,247,0.85)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-        }}
-      >
-        <div className="flex items-center gap-1.5 min-w-max">
+      <nav className="sticky top-16 z-40 -mx-6 px-6 py-3 border-b border-neutral-200 bg-neutral-50 overflow-x-auto scrollbar-hide">
+        <div className="flex items-center gap-1 min-w-max">
           {categories.map((cat) => {
             const config = CATEGORY_CONFIG[cat];
             if (!config) return null;
@@ -43,10 +36,10 @@ export function CategoryNav({
                 type="button"
                 onClick={() => onCategoryClick(cat)}
                 className={cn(
-                  "shrink-0 rounded-full px-3 py-1.5 text-[12px] font-body transition-all cursor-pointer whitespace-nowrap",
+                  "shrink-0 px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.06em] transition-all cursor-pointer whitespace-nowrap",
                   isActive
                     ? "bg-neutral-900 text-white"
-                    : "text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100/80",
+                    : "text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100",
                 )}
               >
                 {config.label}
@@ -72,17 +65,17 @@ export function CategoryNav({
               type="button"
               onClick={() => onCategoryClick(cat)}
               className={cn(
-                "group flex w-full items-center gap-2 py-[7px] text-left transition-colors cursor-pointer border-l-[1.5px]",
+                "group flex w-full items-center gap-2 py-[7px] text-left transition-colors cursor-pointer border-l-2",
                 isActive
                   ? "border-neutral-900 pl-3"
-                  : "border-transparent pl-3 hover:border-neutral-200",
+                  : "border-transparent pl-3 hover:border-neutral-300",
               )}
             >
               <span
                 className={cn(
-                  "text-[13px] font-body transition-colors",
+                  "font-mono text-[11px] uppercase tracking-[0.04em] transition-colors",
                   isActive
-                    ? "font-medium text-neutral-900"
+                    ? "font-bold text-neutral-900"
                     : "text-neutral-400 group-hover:text-neutral-600",
                 )}
               >
@@ -90,8 +83,8 @@ export function CategoryNav({
               </span>
               <span
                 className={cn(
-                  "ml-auto text-[11px] font-mono tabular-nums transition-colors",
-                  isActive ? "text-neutral-400" : "text-neutral-300",
+                  "ml-auto font-mono text-[10px] tabular-nums transition-colors",
+                  isActive ? "text-neutral-500" : "text-neutral-300",
                 )}
               >
                 {getCategoryCount(cat)}

@@ -42,7 +42,7 @@ function ChipToggle({ label, icon, selected, onClick }: { label: string; icon?: 
       type="button"
       onClick={onClick}
       className={cn(
-        'flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-[13px] font-medium transition-all cursor-pointer text-left',
+        'flex items-center gap-2 border px-3.5 py-2.5 text-[13px] font-medium transition-all cursor-pointer text-left',
         selected
           ? 'border-accent-500 bg-accent-50 text-accent-700'
           : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
