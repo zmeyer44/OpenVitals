@@ -19,7 +19,7 @@ const tableRows = [
 
 function WindowChrome({ title }: { title?: string }) {
   return (
-    <div className="flex items-center gap-1.5 px-3 py-2 border-b border-neutral-100">
+    <div className="flex items-center gap-1.5 px-2 h-5 border-b border-neutral-100">
       <div className="size-[6px] rounded-full bg-neutral-300" />
       <div className="size-[6px] rounded-full bg-neutral-300" />
       <div className="size-[6px] rounded-full bg-neutral-300" />
@@ -128,7 +128,7 @@ function FloatingElements() {
 
         {/* ── Row 1: Upload card + Metric card ── */}
         <div
-          className="hero-card absolute top-[20px] left-0 w-[230px] bg-white border border-neutral-200"
+          className="hero-card absolute top-[20px] left-0 w-[230px] bg-white border border-neutral-200 rounded"
           style={{
             animationDelay: "0.2s",
             boxShadow:
@@ -180,7 +180,7 @@ function FloatingElements() {
         </div>
 
         <div
-          className="hero-card absolute top-[24px] left-[248px] w-[195px] bg-white border border-neutral-200"
+          className="hero-card absolute top-[24px] left-[248px] w-[195px] bg-white border border-neutral-200 rounded"
           style={{
             animationDelay: "0.8s",
             boxShadow:
@@ -237,7 +237,7 @@ function FloatingElements() {
 
         {/* ── Row 2: Lab results table + Toast ── */}
         <div
-          className="hero-card absolute top-[170px] left-[20px] w-[330px] bg-white border border-neutral-200"
+          className="hero-card absolute top-[170px] left-[20px] w-[330px] bg-white border border-neutral-200 rounded"
           style={{
             animationDelay: "1.2s",
             boxShadow:
@@ -288,7 +288,7 @@ function FloatingElements() {
 
         {/* Toast — beside the table */}
         <div
-          className="hero-toast absolute top-[190px] left-[368px] bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2"
+          className="hero-toast absolute top-[190px] left-[368px] bg-white border border-neutral-200 px-3 py-2 flex items-center gap-2 rounded"
           style={{
             animationDelay: "3.0s",
             boxShadow:
@@ -325,7 +325,7 @@ function FloatingElements() {
 
         {/* ── Row 3: AI Chat (bottom area) ── */}
         <div
-          className="hero-card absolute top-[400px] left-[60px] w-[320px] bg-white border border-neutral-200"
+          className="hero-card absolute top-[400px] left-[60px] w-[320px] bg-white border border-neutral-200 rounded"
           style={{
             animationDelay: "2.0s",
             boxShadow:
@@ -370,7 +370,7 @@ function FloatingElements() {
         </div>
 
         {/* ── Provenance chain (between table and chat) ── */}
-        <div className="absolute top-[370px] left-[0px] flex items-center gap-1.5">
+        <div className="absolute top-[370px] left-[0px] flex items-center gap-1.5 rounded">
           {[
             { prefix: "SRC", label: "Quest PDF" },
             { prefix: "PSR", label: "v2.1" },

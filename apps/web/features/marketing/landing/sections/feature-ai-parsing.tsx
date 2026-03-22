@@ -137,7 +137,7 @@ export function Ingestion() {
             codes. You review anything that&apos;s uncertain.
           </p>
 
-          <div className="mt-10 border border-neutral-200 bg-white">
+          <div className="mt-10 border border-neutral-200 bg-white rounded-md">
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-neutral-100">
               <div className="size-[7px] rounded-full bg-accent-500" />
               <span className="font-mono text-[11px] font-bold uppercase tracking-[0.06em] text-neutral-500">
