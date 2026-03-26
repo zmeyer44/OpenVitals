@@ -16,12 +16,12 @@ export function CornerCross({ className }: { className?: string }) {
 type Location = "tl" | "tr" | "bl" | "br" | "*";
 
 export function CornerEdge({
-  location,
+  location = "*",
   length = 6,
   width = 1.5,
   className,
 }: {
-  location: Location;
+  location?: Location;
   length?: number;
   width?: number;
   className?: string;

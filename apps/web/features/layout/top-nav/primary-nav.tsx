@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { navigation } from "./nav-config";
+import { CornerCross, CornerEdge } from "@/components/decorations/corner-cross";
 
 interface PrimaryNavProps {
   pathname: string;
@@ -42,7 +43,7 @@ export function PrimaryNav({ pathname }: PrimaryNavProps) {
         {/* Animated highlight */}
         {activeIndex !== -1 && highlightStyle.width > 0 && (
           <motion.div
-            className="absolute h-[30px] bg-neutral-900 rounded"
+            className="absolute h-[30px] bg-accent-50"
             initial={false}
             animate={{
               left: highlightStyle.left,
@@ -53,7 +54,11 @@ export function PrimaryNav({ pathname }: PrimaryNavProps) {
               stiffness: 500,
               damping: 35,
             }}
-          />
+          >
+            <div className="flex-1 relative h-[30px]">
+              <CornerEdge location="*" />
+            </div>
+          </motion.div>
         )}
 
         {navigation.map((item) => {
@@ -68,13 +73,11 @@ export function PrimaryNav({ pathname }: PrimaryNavProps) {
               className={cn(
                 "relative flex h-[30px] items-center gap-1.5 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.04em] transition-colors z-10",
                 isActive
-                  ? "text-white"
+                  ? "text-accent-500"
                   : "text-neutral-500 hover:text-neutral-900",
               )}
             >
-              <item.icon
-                className={cn("h-3.5 w-3.5", isActive && "text-white")}
-              />
+              <item.icon className={cn("h-3.5 w-3.5")} />
               <span className="hidden lg:inline">{item.name}</span>
             </Link>
           );

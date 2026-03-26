@@ -19,6 +19,7 @@ import { MoreDropdown } from "./more-dropdown";
 import { NavSearch } from "./nav-search";
 import { MobileNav } from "./mobile-nav";
 import { FeedbackPopover } from "./feedback-popover";
+import { CornerEdge } from "@/components/decorations/corner-cross";
 
 export function TopNav() {
   const pathname = usePathname();
@@ -45,12 +46,14 @@ export function TopNav() {
             <div className="ml-2 flex items-center gap-2 pl-3 border-l border-neutral-200">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-500">
+                  <button className="relative size-8 bg-neutral-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-500 border-0">
                     <Avatar
-                      className="size-8 rounded-full bg-neutral-200"
+                      hideOutline={true}
+                      className="size-8 bg-transparent text-accent-500 rounded-none border-0"
                       name={session?.user?.name ?? ""}
                       src={session?.user?.image ?? undefined}
                     />
+                    <CornerEdge />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 card">

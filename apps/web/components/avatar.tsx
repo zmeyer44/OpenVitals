@@ -10,6 +10,7 @@ type AvatarProps = {
   width?: number;
   className?: string;
   children?: React.ReactNode;
+  hideOutline?: boolean;
   props?: ComponentProps<typeof DefaultAvatar>;
 };
 type AvatarTextProps = ComponentProps<typeof AvatarFallback>;
@@ -21,6 +22,7 @@ function PureAvatar({
   src,
   className = "rounded",
   width = 24,
+  hideOutline = false,
   ...props
 }: AvatarProps) {
   if (src || name) {
@@ -28,10 +30,6 @@ function PureAvatar({
     return (
       <DefaultAvatar
         className={cn("isolate size-6", !src && "bg-muted", className)}
-        // style={{
-        //   width: width,
-        //   height: width,
-        // }}
         {...props}
       >
         {src && (
@@ -49,10 +47,12 @@ function PureAvatar({
           />
         )}
 
-        <AvatarFallback className="absolute inset-0 z-0 h-full w-full text-xs font-medium">
+        <AvatarFallback className="absolute inset-0 z-0 h-full w-full text-xs font-medium text-inherit">
           {getInitials(alt)}
         </AvatarFallback>
-        <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset" />
+        {!hideOutline && (
+          <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10 ring-inset" />
+        )}
       </DefaultAvatar>
     );
   }
