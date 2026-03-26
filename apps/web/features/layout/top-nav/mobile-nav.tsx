@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useRef, useEffect, useState } from 'react';
-import Link from 'next/link';
-import { motion } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { allMobileNav } from './nav-config';
+import { useRef, useEffect, useState } from "react";
+import Link from "next/link";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+import { allMobileNav } from "./nav-config";
+import { CornerEdge } from "@/components/decorations/corner-cross";
 
 interface MobileNavProps {
   pathname: string;
@@ -17,12 +18,13 @@ export function MobileNav({ pathname, pendingCount }: MobileNavProps) {
 
   const activeIndex = allMobileNav.findIndex(
     (item) =>
-      pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+      pathname === item.href ||
+      (item.href !== "/" && pathname.startsWith(item.href)),
   );
 
   useEffect(() => {
     if (navRef.current && activeIndex !== -1) {
-      const navItems = navRef.current.querySelectorAll('[data-nav-item]');
+      const navItems = navRef.current.querySelectorAll("[data-nav-item]");
       const activeItem = navItems[activeIndex] as HTMLElement;
       if (activeItem) {
         setHighlightStyle({
@@ -42,33 +44,37 @@ export function MobileNav({ pathname, pendingCount }: MobileNavProps) {
         {/* Animated highlight for mobile */}
         {activeIndex !== -1 && highlightStyle.width > 0 && (
           <motion.div
-            className="absolute h-[28px] bg-neutral-900 -z-0"
+            className="absolute h-[28px] bg-accent-50 -z-0"
             initial={false}
             animate={{
               left: highlightStyle.left,
               width: highlightStyle.width,
             }}
             transition={{
-              type: 'spring',
+              type: "spring",
               stiffness: 500,
               damping: 35,
             }}
-          />
+          >
+            <div className="flex-1 relative h-[28px]">
+              <CornerEdge location="*" />
+            </div>
+          </motion.div>
         )}
 
         {allMobileNav.map((item) => {
           const isActive =
             pathname === item.href ||
-            (item.href !== '/' && pathname.startsWith(item.href));
-          const hasBadge = item.name === 'Approvals' && pendingCount > 0;
+            (item.href !== "/" && pathname.startsWith(item.href));
+          const hasBadge = item.name === "Approvals" && pendingCount > 0;
           return (
             <Link
               key={item.name}
               href={item.href}
               data-nav-item
               className={cn(
-                'relative flex items-center gap-1 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.04em] whitespace-nowrap transition-colors z-10',
-                isActive ? 'text-white' : 'text-neutral-500'
+                "relative flex items-center gap-1 px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.04em] whitespace-nowrap transition-colors z-10",
+                isActive ? "text-accent-500" : "text-neutral-500",
               )}
             >
               <item.icon className="h-3.5 w-3.5" />

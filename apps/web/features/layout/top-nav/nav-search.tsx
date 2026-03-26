@@ -289,8 +289,17 @@ export function NavSearch() {
 
   return (
     <>
+      <button
+        onClick={() => setOpen(true)}
+        className={cn(
+          "flex xl:hidden items-center gap-1.5 px-2.5 py-1.5 text-[13px] font-medium transition-colors",
+          "text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50",
+        )}
+      >
+        <Search className="h-3.5 w-3.5" />
+      </button>
       {/* Trigger button */}
-      <div className="hidden lg:flex items-center">
+      <div className="hidden xl:flex items-center">
         <button
           onClick={() => setOpen(true)}
           className="relative flex items-center cursor-pointer"
