@@ -6,8 +6,7 @@ export default defineConfig({
   outDir: "dist",
   clean: true,
   bundle: true,
-  noExternal: [/.*/],
-  external: ["pdfjs-dist", "@napi-rs/canvas"],
+  noExternal: [/^(?!(pdfjs-dist|@napi-rs\/canvas)).*$/],
   banner: {
     js: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`,
   },
