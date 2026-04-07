@@ -6,10 +6,17 @@ import type { RawExtraction, NormalizationResult } from '@openvitals/ingestion';
 import { normalizeExtractions } from '@openvitals/ingestion';
 import type { UserDemographics, DemographicRange } from '@openvitals/ingestion';
 
+export interface NormalizeOutput {
+  result: NormalizationResult;
+  metricDefs: any[];
+  unitConversions: any[];
+  demographics: any;
+}
+
 export async function normalize(
   ctx: WorkflowContext,
   extractions: RawExtraction[]
-): Promise<NormalizationResult> {
+): Promise<NormalizeOutput> {
   const db = getDb();
 
   await db.update(importJobs)
@@ -85,5 +92,15 @@ export async function normalize(
     .set({ normalizeCompletedAt: new Date() })
     .where(eq(importJobs.id, ctx.importJobId));
 
-  return normalizeExtractions(extractions, metricDefs, unitConvs, 0.85, demographics);
+  const result = normalizeExtractions(extractions, metricDefs, unitConvs, 0.85, demographics);
+
+  // Log flagged extractions for debugging
+  if (result.flagged.length > 0) {
+    console.log(`[normalize] Flagged ${result.flagged.length} extractions:`);
+    for (const f of result.flagged) {
+      console.log(`  - "${f.extraction.analyte}" (${f.reason}): ${f.details}`);
+    }
+  }
+
+  return { result, metricDefs, unitConversions: unitConvs, demographics };
 }

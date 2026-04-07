@@ -1,4 +1,12 @@
-import type { DataCategory, DocumentType } from '@openvitals/common';
+import type { DataCategory, DocumentType } from "@openvitals/common";
+
+// Re-export normalizer types so tests can import from './types'
+export type {
+  MetricDefinition,
+  UnitConversion,
+  UserDemographics,
+  DemographicRange,
+} from "./normalizer";
 
 export interface RawExtraction {
   analyte: string;
@@ -38,7 +46,11 @@ export interface NormalizedObservation {
 
 export interface FlaggedExtraction {
   extraction: RawExtraction;
-  reason: 'low_confidence' | 'unmatched_metric' | 'ambiguous_unit' | 'duplicate_candidate';
+  reason:
+    | "low_confidence"
+    | "unmatched_metric"
+    | "ambiguous_unit"
+    | "duplicate_candidate";
   details: string;
 }
 
