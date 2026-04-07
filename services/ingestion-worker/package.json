@@ -20,13 +20,11 @@
     "adm-zip": "^0.5.17",
     "ai": "^6.0.116",
     "drizzle-orm": "^0.45.1",
-    "pdf-parse": "^2.4.5",
     "pdfjs-dist": "^5.5.207"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.8",
     "@types/express": "^5.0.6",
-    "@types/pdf-parse": "^1.1.5",
     "tsup": "^8.4.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
