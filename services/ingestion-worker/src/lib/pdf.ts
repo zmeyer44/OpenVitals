@@ -284,5 +284,6 @@ export async function extractTextFromPdf(buffer: Buffer): Promise<string> {
   }
 
   doc.destroy();
-  return text;
+  // Strip null bytes — PostgreSQL text columns reject 0x00
+  return text.replace(/\0/g, "");
 }
