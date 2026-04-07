@@ -9,13 +9,13 @@ import {
 } from "@/components/health/status-badge";
 import { TrendChart } from "@/components/health/trend-chart";
 import {
-  deriveStatus,
   deriveOptimalStatus,
   formatRange,
 } from "@/lib/health-utils";
+import { useDynamicStatus } from "@/hooks/use-dynamic-status";
 import { cn, formatDate, formatObsValue, isDurationMetric } from "@/lib/utils";
 import { DataTable, type DataTableColumn } from "@/components/data-table";
-import { Pill, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { Pill, TrendingUp, TrendingDown, Minus, Pencil, Trash2, Check, X } from "lucide-react";
 
 const TIME_RANGES = [
   { key: "3m", label: "3M", months: 3 },
@@ -77,6 +77,7 @@ export default function LabDetailPage({
   params: Promise<{ metricCode: string }>;
 }) {
   const { metricCode } = use(params);
+  const { getStatus, getRanges } = useDynamicStatus();
 
   const { data, isLoading } = trpc.observations.list.useQuery({
     metricCode,
@@ -88,10 +89,26 @@ export default function LabDetailPage({
     metricCode,
   });
   const { data: medsData } = trpc.medications.list.useQuery({});
-  const displayPrecision =
-    metricsData?.find((m) => m.id === metricCode)?.displayPrecision ?? null;
+  const utils = trpc.useUtils();
+  const correctMutation = trpc.observations.correct.useMutation({
+    onSuccess: () => utils.observations.list.invalidate({ metricCode }),
+  });
+  const deleteMutation = trpc.observations.delete.useMutation({
+    onSuccess: () => utils.observations.list.invalidate({ metricCode }),
+  });
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [editNote, setEditNote] = useState("");
+  const metricDef = metricsData?.find((m) => m.id === metricCode);
+  const displayPrecision = metricDef?.displayPrecision ?? null;
   const showOptimal = prefsData?.showOptimalRanges ?? true;
   const optimalRange = optimalRangesData?.[metricCode] ?? null;
+  // Get canonical ranges from the dynamic status hook
+  const canonRanges = getRanges(metricCode);
+  // Display the active range used for status (optimal first, then reference)
+  const activeRangeLow = canonRanges?.optimalLow ?? canonRanges?.referenceLow;
+  const activeRangeHigh = canonRanges?.optimalHigh ?? canonRanges?.referenceHigh;
+  const canonicalRange = formatRange(activeRangeLow, activeRangeHigh, metricDef?.unit);
 
   const items = data?.items ?? [];
 
@@ -145,13 +162,14 @@ export default function LabDetailPage({
         header: "Value",
         width: "0.8fr",
         cell: (obs) => {
-          const obsStatus = deriveStatus(obs);
+          const obsStatus = getStatus(obs);
+          const isAbn = obsStatus !== "normal";
           return (
             <div className="flex items-baseline gap-1.5">
               <span
                 className={cn(
                   "text-[15px] font-semibold tracking-[-0.01em] font-mono tabular-nums",
-                  obs.isAbnormal
+                  isAbn
                     ? obsStatus === "critical"
                       ? "text-health-critical"
                       : "text-health-warning"
@@ -176,15 +194,17 @@ export default function LabDetailPage({
       },
       {
         id: "range",
-        header: "Ref. Range",
+        header: "Lab Ref.",
         width: "1fr",
         cell: (obs) => (
-          <div className="text-xs text-neutral-400 font-mono">
-            {formatRange(
-              obs.referenceRangeLow,
-              obs.referenceRangeHigh,
-              obs.unit,
-            )}
+          <div>
+            <div className="text-[11px] text-neutral-400 font-mono">
+              {formatRange(
+                obs.referenceRangeLow,
+                obs.referenceRangeHigh,
+                obs.unit,
+              )}
+            </div>
           </div>
         ),
       },
@@ -193,8 +213,8 @@ export default function LabDetailPage({
         header: "Status",
         width: "0.8fr",
         cell: (obs) => {
-          const obsStatus = deriveStatus(obs);
-          return obs.isAbnormal ? (
+          const obsStatus = getStatus(obs);
+          return obsStatus !== "normal" ? (
             <StatusBadge
               status={obsStatus}
               label={obsStatus === "critical" ? "High" : "Abnormal"}
@@ -205,27 +225,40 @@ export default function LabDetailPage({
         },
       },
       {
-        id: "source",
-        header: "Source",
-        width: "0.8fr",
+        id: "actions",
+        header: "",
+        width: "90px",
         cell: (obs) => (
-          <div className="text-[11px] text-neutral-400 font-mono truncate">
-            {obs.status === "corrected"
-              ? "Corrected"
-              : obs.status === "confirmed"
-                ? "Confirmed"
-                : "Extracted"}
+          <div className="flex items-center justify-end gap-1">
+            <button
+              onClick={() => {
+                setEditingId(obs.id);
+                setEditValue(obs.valueNumeric != null ? String(obs.valueNumeric) : "");
+                setEditNote("");
+              }}
+              className="rounded-md p-1 text-neutral-300 transition-all hover:bg-neutral-100 hover:text-neutral-500"
+              title="Edit"
+            >
+              <Pencil className="h-3 w-3" />
+            </button>
+            <button
+              onClick={() => deleteMutation.mutate({ id: obs.id })}
+              className="rounded-md p-1 text-neutral-300 transition-all hover:bg-red-50 hover:text-red-500"
+              title="Remove"
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
           </div>
         ),
       },
     ],
-    [metricCode, displayPrecision],
+    [metricCode, displayPrecision, deleteMutation],
   );
 
   const latest = sorted[0];
   const previous = sorted[1];
   const metricName = formatMetricName(metricCode);
-  const status: HealthStatus = latest ? deriveStatus(latest) : "neutral";
+  const status: HealthStatus = latest ? getStatus(latest) : "neutral";
 
   const [timeRange, setTimeRange] = useState<TimeRangeKey>("all");
 
@@ -298,7 +331,8 @@ export default function LabDetailPage({
     );
   }
 
-  const refRange = formatRange(
+  // Use canonical range for the summary card (consistent standard)
+  const refRange = canonicalRange !== "—" ? canonicalRange : formatRange(
     latest?.referenceRangeLow,
     latest?.referenceRangeHigh,
     latest?.unit,
@@ -372,7 +406,11 @@ export default function LabDetailPage({
           }
         />
         <SummaryCard label="Total tests" value={String(items.length)} />
-        <SummaryCard label="Reference range" value={refRange} />
+        <SummaryCard
+          label={optimalRange ? "Active range" : "Reference range"}
+          value={refRange}
+          subtext={optimalRange ? "Optimal" : undefined}
+        />
         {showOptimal && optimalRange && (
           <SummaryCard
             label="Optimal range"
@@ -478,11 +516,64 @@ export default function LabDetailPage({
         rowConfig={{
           getRowKey: (obs) => obs.id,
           getRowTint: (obs) =>
-            obs.isAbnormal
+            getStatus(obs) !== "normal"
               ? "bg-health-warning-bg/40"
               : undefined,
         }}
       />
+
+      {/* Inline edit overlay */}
+      {editingId && (
+        <div className="card mt-2 border-accent-200 bg-accent-50/30 p-4">
+          <div className="flex flex-wrap items-end gap-3">
+            <label className="flex flex-col gap-1">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-neutral-400 font-mono">
+                Value
+              </span>
+              <input
+                type="number"
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                className="w-28 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all"
+              />
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-neutral-400 font-mono">
+                Note
+              </span>
+              <input
+                type="text"
+                value={editNote}
+                onChange={(e) => setEditNote(e.target.value)}
+                placeholder="Reason for correction"
+                className="w-48 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 placeholder:text-neutral-400 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100 transition-all"
+              />
+            </label>
+            <button
+              onClick={async () => {
+                await correctMutation.mutateAsync({
+                  id: editingId,
+                  ...(editValue !== "" && { valueNumeric: Number(editValue) }),
+                  ...(editNote !== "" && { correctionNote: editNote }),
+                });
+                setEditingId(null);
+              }}
+              disabled={correctMutation.isPending}
+              className="flex items-center gap-1.5 rounded-lg bg-accent-600 px-4 py-2 text-[13px] font-medium text-white shadow-sm hover:bg-accent-700 transition-colors disabled:opacity-50"
+            >
+              <Check className="h-3 w-3" />
+              Save
+            </button>
+            <button
+              onClick={() => setEditingId(null)}
+              className="flex items-center gap-1.5 rounded-lg border border-neutral-200 px-4 py-2 text-[13px] font-medium text-neutral-600 shadow-sm hover:bg-neutral-50 transition-colors"
+            >
+              <X className="h-3 w-3" />
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -493,6 +584,7 @@ function MetricContext({
   metricName,
 }: {
   observations: Array<{
+    metricCode: string;
     valueNumeric?: number | null;
     isAbnormal?: boolean | null;
     observedAt: string | Date;
@@ -507,6 +599,7 @@ function MetricContext({
   }>;
   metricName: string;
 }) {
+  const { isAbnormal: isObsAbnormal } = useDynamicStatus();
   if (observations.length < 2) return null;
 
   const oldest = new Date(observations[observations.length - 1]!.observedAt).getTime();
@@ -533,7 +626,7 @@ function MetricContext({
   const secondAvg = secondHalf.reduce((s, v) => s + v, 0) / secondHalf.length;
   const changePct = firstAvg !== 0 ? ((secondAvg - firstAvg) / Math.abs(firstAvg)) * 100 : 0;
 
-  const latestAbnormal = observations[0]?.isAbnormal;
+  const latestAbnormal = observations[0] ? isObsAbnormal(observations[0]) : null;
   const trendDirection = Math.abs(changePct) < 3 ? 'stable' : changePct > 0 ? 'rising' : 'falling';
 
   if (overlapping.length === 0 && trendDirection === 'stable') return null;

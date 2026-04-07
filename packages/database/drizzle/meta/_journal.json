@@ -64,6 +64,27 @@
       "when": 1774031593654,
       "tag": "0008_public_wolverine",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1775132667401,
+      "tag": "0009_purple_dragon_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1775350800000,
+      "tag": "0010_seed_missing_metric_data",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1775351400000,
+      "tag": "0011_consolidate_metric_codes",
+      "breakpoints": true
     }
   ]
 }

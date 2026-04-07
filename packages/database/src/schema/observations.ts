@@ -5,6 +5,7 @@ import {
   text,
   boolean,
   timestamp,
+  date,
   real,
   jsonb,
   index,
@@ -12,6 +13,7 @@ import {
 import { relations } from 'drizzle-orm';
 import { users } from './users';
 import { dataSources, sourceArtifacts, importJobs } from './sources';
+import { metricDefinitions } from './metrics';
 
 // ── Observations ───────────────────────────────────────────────────────────────
 
@@ -79,3 +81,37 @@ export const observationsRelations = relations(observations, ({ one }) => ({
     references: [importJobs.id],
   }),
 }));
+
+// ── Flagged Extractions ───────────────────────────────────────────────────────
+
+export const flaggedExtractions = pgTable(
+  'flagged_extractions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    importJobId: uuid('import_job_id')
+      .notNull()
+      .references(() => importJobs.id, { onDelete: 'cascade' }),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    analyte: text('analyte').notNull(),
+    valueNumeric: real('value_numeric'),
+    valueText: text('value_text'),
+    unit: varchar('unit', { length: 50 }),
+    referenceRangeLow: real('reference_range_low'),
+    referenceRangeHigh: real('reference_range_high'),
+    referenceRangeText: text('reference_range_text'),
+    isAbnormal: boolean('is_abnormal'),
+    observedAt: date('observed_at'),
+    flagReason: text('flag_reason').notNull(),
+    flagDetails: text('flag_details'),
+    resolved: boolean('resolved').notNull().default(false),
+    resolvedMetricCode: varchar('resolved_metric_code', { length: 50 }).references(
+      () => metricDefinitions.id,
+    ),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  (table) => ({
+    importJobIdx: index('idx_flagged_import_job').on(table.importJobId),
+  }),
+);
