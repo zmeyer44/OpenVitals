@@ -1,0 +1,84 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-openvitals}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-openvitals}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      AI_DEFAULT_MODEL: ${AI_DEFAULT_MODEL:-google/gemini-2.5-flash}
+      BLOB_STORAGE_PROVIDER: local
+      LOCAL_BLOB_DIR: /data/blobs
+      RENDER_WORKER_URL: http://worker:4000
+      RENDER_WEBHOOK_SECRET: ${RENDER_WEBHOOK_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      NODE_ENV: production
+    volumes:
+      - blobdata:/data/blobs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    build:
+      context: .
+      dockerfile: services/ingestion-worker/Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-openvitals}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      AI_DEFAULT_MODEL: ${AI_DEFAULT_MODEL:-google/gemini-2.5-flash}
+      BLOB_STORAGE_PROVIDER: local
+      LOCAL_BLOB_DIR: /data/blobs
+      RENDER_WEBHOOK_SECRET: ${RENDER_WEBHOOK_SECRET}
+      NODE_ENV: production
+    volumes:
+      - blobdata:/data/blobs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  # Run migrations and seed on deploy (one-shot, exits after completion)
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: base
+    restart: "no"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-openvitals}
+    working_dir: /app
+    command: >
+      sh -c "cd packages/database && pnpm db:migrate"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  blobdata:
