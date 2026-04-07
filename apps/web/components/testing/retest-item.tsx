@@ -15,7 +15,12 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
-type Urgency = "overdue" | "due_soon" | "upcoming" | "on_track";
+type Urgency =
+  | "overdue"
+  | "due_soon"
+  | "upcoming"
+  | "on_track"
+  | "never_tested";
 
 interface RetestRecommendation {
   metricCode: string;
@@ -23,7 +28,7 @@ interface RetestRecommendation {
   category: string;
   unit: string | null;
   lastValue: number | null;
-  lastObservedAt: string;
+  lastObservedAt: string | null;
   daysSinceLastTest: number;
   healthStatus: HealthStatus;
   optimalStatus: "optimal" | "suboptimal" | "unknown";
@@ -33,6 +38,8 @@ interface RetestRecommendation {
   isPaused: boolean;
   urgency: Urgency;
   dueInDays: number;
+  preventionPanel?: string | null;
+  preventionWhy?: string | null;
 }
 
 interface RetestItemProps {
@@ -57,6 +64,10 @@ const urgencyStyles: Record<Urgency, { text: string; bar: string }> = {
   on_track: {
     text: "text-[var(--color-testing-on-track)]",
     bar: "bg-[var(--color-testing-on-track)]",
+  },
+  never_tested: {
+    text: "text-neutral-500",
+    bar: "bg-neutral-300",
   },
 };
 
