@@ -5,7 +5,8 @@ import { TitleActionHeader } from '@/components/title-action-header';
 import { MetricCard } from '@/components/health/metric-card';
 import { MetricSummaryCard } from '@/components/health/metric-summary-card';
 import { AnimatedEmptyState } from '@/components/animated-empty-state';
-import { deriveStatus, formatRange } from '@/lib/health-utils';
+import { formatRange } from '@/lib/health-utils';
+import { useDynamicStatus } from '@/hooks/use-dynamic-status';
 import { formatDate, formatObsValue, isDurationMetric } from '@/lib/utils';
 import { TestTubes, Droplets, Activity, Microscope, FlaskConical, Dna, Download } from 'lucide-react';
 import { Button } from '@/components/button';
@@ -18,6 +19,7 @@ function formatMetricName(code: string) {
 }
 
 export default function LabsPage() {
+  const { getStatus, isAbnormal: isObsAbnormal } = useDynamicStatus();
   const { data, isLoading } = trpc.observations.list.useQuery({ limit: 200 });
   const { data: metricsData } = trpc.metrics.list.useQuery();
   const precisionMap = new Map(
@@ -75,7 +77,7 @@ export default function LabsPage() {
     );
     const latest = sorted[0]!;
     const previous = sorted[1];
-    const status = deriveStatus(latest);
+    const status = getStatus(latest);
     const sparkData = sorted.slice(0, 6).reverse().map((o) => o.valueNumeric ?? 0);
 
     const deltaVal =
@@ -131,7 +133,7 @@ export default function LabsPage() {
                   o.unit,
                   o.referenceRangeLow,
                   o.referenceRangeHigh,
-                  o.isAbnormal ? 'Yes' : 'No',
+                  isObsAbnormal(o) ? 'Yes' : 'No',
                   new Date(o.observedAt).toISOString().split('T')[0],
                   o.category,
                 ]),
