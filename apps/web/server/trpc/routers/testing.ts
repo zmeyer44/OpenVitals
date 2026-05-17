@@ -14,6 +14,10 @@ import {
 } from "@openvitals/database";
 import { computeAge } from "@/lib/demographics";
 import { deriveStatus, deriveOptimalStatus } from "@/lib/health-utils";
+import {
+  getAllPreventionMetrics,
+  getPreventionFrequency,
+} from "@/lib/prevention-panels";
 
 // Categories that are continuously measured (not lab-tested)
 const EXCLUDED_CATEGORIES = ["wearable", "vital_sign"];
@@ -243,13 +247,17 @@ export const testingRouter = createRouter({
     if (allObs.length === 0) return [];
 
     const metricCodes = allObs.map((o) => o.metricCode);
+    // Also include prevention panel metrics for gap detection
+    const allCodes = [
+      ...new Set([...metricCodes, ...getAllPreventionMetrics()]),
+    ];
 
     // Get metric definitions, optimal ranges, and user overrides in parallel
     const [metricDefs, optRanges, userOverrides] = await Promise.all([
       ctx.db
         .select()
         .from(metricDefinitions)
-        .where(inArray(metricDefinitions.id, metricCodes)),
+        .where(inArray(metricDefinitions.id, allCodes)),
       ctx.db
         .select()
         .from(optimalRanges)
@@ -277,7 +285,32 @@ export const testingRouter = createRouter({
 
     const now = Date.now();
 
-    const recommendations = allObs.map((obs) => {
+    type Recommendation = {
+      metricCode: string;
+      metricName: string;
+      category: string;
+      unit: string | null;
+      lastValue: number | null;
+      lastObservedAt: string | null;
+      daysSinceLastTest: number;
+      healthStatus: "normal" | "warning" | "critical" | "info" | "neutral";
+      optimalStatus: "optimal" | "suboptimal" | "unknown";
+      recommendedIntervalDays: number;
+      userOverrideIntervalDays: number | null;
+      effectiveIntervalDays: number;
+      isPaused: boolean;
+      urgency:
+        | "overdue"
+        | "due_soon"
+        | "upcoming"
+        | "on_track"
+        | "never_tested";
+      dueInDays: number;
+      preventionPanel: string | null;
+      preventionWhy: string | null;
+    };
+
+    const recommendations: Recommendation[] = allObs.map((obs) => {
       const def = defMap.get(obs.metricCode);
       const opt = optMap.get(obs.metricCode);
       const override = overrideMap.get(obs.metricCode);
@@ -287,7 +320,7 @@ export const testingRouter = createRouter({
         referenceRangeLow: obs.referenceRangeLow,
         referenceRangeHigh: obs.referenceRangeHigh,
         valueNumeric: obs.valueNumeric,
-      });
+      }) as Recommendation["healthStatus"];
 
       const optimalStatus = deriveOptimalStatus({
         valueNumeric: obs.valueNumeric,
@@ -319,7 +352,12 @@ export const testingRouter = createRouter({
       );
       const dueInDays = effectiveIntervalDays - daysSinceLastTest;
 
-      let urgency: "overdue" | "due_soon" | "upcoming" | "on_track";
+      let urgency:
+        | "overdue"
+        | "due_soon"
+        | "upcoming"
+        | "on_track"
+        | "never_tested";
       if (dueInDays <= -30) {
         urgency = "overdue";
       } else if (dueInDays <= 0) {
@@ -329,6 +367,9 @@ export const testingRouter = createRouter({
       } else {
         urgency = "on_track";
       }
+
+      // Check if this metric is in a prevention panel
+      const prevention = getPreventionFrequency(obs.metricCode);
 
       return {
         metricCode: obs.metricCode,
@@ -346,13 +387,76 @@ export const testingRouter = createRouter({
         isPaused,
         urgency,
         dueInDays,
+        preventionPanel: prevention?.panelLabel ?? null,
+        preventionWhy: prevention?.why ?? null,
       };
     });
 
-    // Sort: overdue first, then due_soon, upcoming, on_track; within each by dueInDays asc
-    const urgencyOrder = { overdue: 0, due_soon: 1, upcoming: 2, on_track: 3 };
+    // ── Prevention gap items (never tested but recommended) ──────────
+    const testedCodes = new Set(allObs.map((o) => o.metricCode));
+    const preventionMetrics = getAllPreventionMetrics();
+
+    // Also check aliases — if user has "25_hydroxyvitamin_d", don't suggest "vitamin_d"
+    const ALIAS_MAP: Record<string, string[]> = {
+      vitamin_d: ["25_hydroxyvitamin_d", "vitamin_d_25_hydroxyvitamin_d"],
+      crp: ["c_reactive_protein", "hs_crp"],
+      hba1c: ["hemoglobin_a1c"],
+    };
+
+    for (const code of preventionMetrics) {
+      // Skip if already tested (primary code or aliases)
+      const aliases = ALIAS_MAP[code] ?? [];
+      const isTested =
+        testedCodes.has(code) || aliases.some((a) => testedCodes.has(a));
+      if (isTested) continue;
+
+      // Skip calculated metrics (they're computed, not tested)
+      if (code === "homa_ir") continue;
+
+      const def = defMap.get(code);
+      const prevention = getPreventionFrequency(code);
+      if (!prevention) continue;
+
+      recommendations.push({
+        metricCode: code,
+        metricName: def?.name ?? code.replace(/_/g, " "),
+        category: def?.category ?? "lab_result",
+        unit: def?.unit ?? null,
+        lastValue: null,
+        lastObservedAt: null,
+        daysSinceLastTest: Infinity,
+        healthStatus: "neutral",
+        optimalStatus: "unknown",
+        recommendedIntervalDays: prevention.frequencyDays,
+        userOverrideIntervalDays: null,
+        effectiveIntervalDays: prevention.frequencyDays,
+        isPaused: false,
+        urgency: "never_tested" as const,
+        dueInDays: 0,
+        preventionPanel: prevention.panelLabel,
+        preventionWhy: prevention.why,
+      });
+    }
+
+    // Sort: flagged retests first, then prevention gaps, then routine
+    // Within each group: overdue → due_soon → upcoming → on_track → never_tested
+    const urgencyOrder: Record<string, number> = {
+      overdue: 0,
+      due_soon: 1,
+      upcoming: 2,
+      on_track: 3,
+      never_tested: 4,
+    };
     recommendations.sort((a, b) => {
-      const groupDiff = urgencyOrder[a.urgency] - urgencyOrder[b.urgency];
+      // Flagged (critical/warning) metrics always first
+      const aFlagged =
+        a.healthStatus === "critical" || a.healthStatus === "warning" ? 0 : 1;
+      const bFlagged =
+        b.healthStatus === "critical" || b.healthStatus === "warning" ? 0 : 1;
+      if (aFlagged !== bFlagged) return aFlagged - bFlagged;
+
+      const groupDiff =
+        (urgencyOrder[a.urgency] ?? 5) - (urgencyOrder[b.urgency] ?? 5);
       if (groupDiff !== 0) return groupDiff;
       return a.dueInDays - b.dueInDays;
     });

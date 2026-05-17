@@ -2,7 +2,7 @@
 
 import { MiniSparkline } from '@/components/health/mini-sparkline';
 import { StatusBadge } from '@/components/health/status-badge';
-import { deriveStatus } from '@/lib/health-utils';
+import { useDynamicStatus } from '@/hooks/use-dynamic-status';
 import { formatDate } from '@/lib/utils';
 
 // --- Labs Preview ---
@@ -19,6 +19,8 @@ interface LabsPreviewContentProps {
 }
 
 export function LabsPreviewContent({ items }: LabsPreviewContentProps) {
+  const { getStatus, isAbnormal: isObsAbnormal } = useDynamicStatus();
+
   if (items.length === 0) {
     return <p className="text-[13px] text-neutral-400 font-body">No lab results yet</p>;
   }
@@ -30,7 +32,7 @@ export function LabsPreviewContent({ items }: LabsPreviewContentProps) {
     byMetric.set(item.metricCode, existing);
   }
 
-  const abnormalCount = items.filter((i) => i.isAbnormal).length;
+  const abnormalCount = items.filter((i) => isObsAbnormal(i)).length;
   const metricCount = byMetric.size;
 
   // Top 3 metrics by count, abnormal first
@@ -40,7 +42,7 @@ export function LabsPreviewContent({ items }: LabsPreviewContentProps) {
         (a, b) => new Date(b.observedAt).getTime() - new Date(a.observedAt).getTime(),
       );
       const sparkData = sorted.slice(0, 6).reverse().map((o) => o.valueNumeric ?? 0);
-      const status = deriveStatus(sorted[0]!);
+      const status = getStatus(sorted[0]!);
       return { code, sparkData, status };
     })
     .sort((a, b) => {
